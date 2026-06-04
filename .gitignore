@@ -1,0 +1,45 @@
+# Ignore everything unless explicitly allowed below.
+*
+
+# Repository metadata needed for the curated code bundle.
+!/.gitignore
+!/.gitmodules
+!/PinCFlow-EMS
+!/PinCFlow-EMS/
+
+# Readme and documentation files.
+!/README.md
+!/readme_code.md
+!/readme_modules.md
+!/readme_plot.md
+
+# Named repository logo used by README/wiki pages.
+!/enufft_logo_2.png
+
+# Ported compute drivers.
+!/Code_Alps.py
+!/Code_Alps_Preprocess.py
+!/Code_Ems.py
+!/Code_Mono.py
+!/Code_Mountain.py
+!/Code_Nufft.py
+
+# Ported shared modules.
+!/Module_Alps.py
+!/Module_Csa.py
+!/Module_Csv.py
+!/Module_Ems.py
+!/Module_Helpers.py
+!/Module_Nufft.py
+!/Module_Orography.py
+!/Module_Plot_Template.py
+
+# Ported plotting drivers.
+!/Plot_Alps.py
+!/Plot_Ems.py
+!/Plot_Mono.py
+!/Plot_Mountain.py
+!/Plot_Nufft.py
+
+# Named run script.
+!/Run_Alps_Levante.sh

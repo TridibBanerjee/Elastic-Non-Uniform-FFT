@@ -248,7 +248,7 @@ This repository is licensed under the Apache License 2.0. See [LICENSE](LICENSE)
 
 Attribution notices for the ENUFFT framework are provided in [NOTICE](NOTICE). If you use ENUFFT in scholarly, published, or publicly distributed work, please cite it using [CITATION.cff](CITATION.cff).
 
-The `PinCFlow-EMS` submodule is a separate project with its own license. See [PinCFlow-EMS/LICENSE.md](PinCFlow-EMS/LICENSE.md).
+The `PinCFlow-EMS` submodule is a separate project with its own license. See the [PinCFlow-EMS license](https://github.com/TridibBanerjee/PinCFlow-EMS/blob/EMS/LICENSE.md).
 
 ## Documentation Index
 

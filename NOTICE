@@ -11,4 +11,5 @@ distributed results, please cite the ENUFFT paper and/or the repository
 citation metadata in CITATION.cff.
 
 The PinCFlow-EMS submodule is a separate project with its own license. See
-PinCFlow-EMS/LICENSE.md for the license terms that apply to that submodule.
+https://github.com/TridibBanerjee/PinCFlow-EMS/blob/EMS/LICENSE.md for the
+license terms that apply to that submodule.

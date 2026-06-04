@@ -198,7 +198,7 @@ A standard FFT is then used to obtain
 $$
 \hat{\tilde h}_{m,n}=
 \frac{1}{N_x^{\mathrm{aux}}N_y^{\mathrm{aux}}}
-\operatorname{FFT2}(\tilde h)_{m,n}.
+\mathrm{FFT2}(\tilde h)_{m,n}.
 $$
 
 Deconvolution is performed by division through the grid-space Fourier transform of the one-dimensional spreading kernel in each direction

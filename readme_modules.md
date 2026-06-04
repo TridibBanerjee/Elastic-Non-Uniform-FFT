@@ -1403,9 +1403,9 @@ If no mesh label is supplied, the fallback is `regular`. The returned mesh conta
 For structured Alps meshes, the function assigns each point $p_q=(x_q,y_q)$ analytically. It first finds the structured cell
 
 $$
-i=\operatorname{search}(x_q,\{x_i^v\})-1,
+i=\mathrm{search}(x_q,\{x_i^v\})-1,
 \qquad
-j=\operatorname{search}(y_q,\{y_j^v\})-1,
+j=\mathrm{search}(y_q,\{y_j^v\})-1,
 $$
 
 then converts to local cell coordinates
@@ -1618,7 +1618,7 @@ $$
 \sqrt{\frac1{Q_T}\sum_{q\in T_r}
 \left(h_q^{\mathrm{rec}}-h_q'\right)^2},
 \qquad
-\mathrm{relRMSE}=\frac{\mathrm{RMSE}}{\operatorname{std}_{q\in T_r}(h_q')}.
+\mathrm{relRMSE}=\frac{\mathrm{RMSE}}{\mathrm{std}_{q\in T_r}(h_q')}.
 $$
 
 When the target triangle has reference standard deviation at or below `1 m`, `rel_rmse_en` and `rel_rmse_csa` are written as `NaN` because the relative normalization is not meaningful for flat or nearly flat terrain. The absolute `rmse_en` and `rmse_csa` values are still stored, so these cells remain diagnosable without creating artificial small-denominator outliers in pooled relative-RMSE summaries. It also stores $K^\star$, dominant mode direction, non-DC spectral variance, sorted amplitudes, point counts, triangle geometry, and `metric_version` so old summary CSVs are not reused after metric semantics change.
@@ -1628,7 +1628,7 @@ When the target triangle has reference standard deviation at or below `1 m`, `re
 For a scalar diagnostic $z_r$ over successful triangles, finite medians and maxima are computed as
 
 $$
-\tilde z=\operatorname{median}\{z_r:\mathrm{finite}(z_r)\},
+\tilde z=\mathrm{median}\{z_r:\mathrm{finite}(z_r)\},
 \qquad
 z_{\max}=\max\{z_r:\mathrm{finite}(z_r)\}.
 $$
@@ -1636,7 +1636,7 @@ $$
 The variance-ratio medians use only triangles whose true reference standard deviation is greater than `1 m`:
 
 $$
-\operatorname{median}\left(
+\mathrm{median}\left(
 \frac{V_{\mathrm{spec},r}}{V_{\mathrm{true},r}}
 \right).
 $$

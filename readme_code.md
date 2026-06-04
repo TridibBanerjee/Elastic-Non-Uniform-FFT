@@ -542,14 +542,14 @@ $$
 The remaining labels are possible labels for points outside the triangle. They are assigned from the direction of each point relative to the same centre. The three vertex directions are
 
 $$
-\alpha_i=\operatorname{atan2}(y_i-y_c,x_i-x_c)\bmod 2\pi,
+\alpha_i=\mathrm{atan2}(y_i-y_c,x_i-x_c)\bmod 2\pi,
 \qquad i=0,1,2,
 $$
 
 and the direction from the centre to point $p_q$ is
 
 $$
-\theta_q=\operatorname{atan2}(y_q-y_c,x_q-x_c)\bmod 2\pi.
+\theta_q=\mathrm{atan2}(y_q-y_c,x_q-x_c)\bmod 2\pi.
 $$
 
 The modulo maps every direction to the same range $[0,2\pi)$, so a direction such as $-\pi/6$ is treated as the equivalent direction $11\pi/6$. The $\alpha_i$ values are the candidate angular boundaries for the outside labels. The $\theta_q$ value is the angle being classified. The code sorts the boundaries.

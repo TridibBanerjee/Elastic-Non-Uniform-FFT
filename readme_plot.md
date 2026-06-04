@@ -328,9 +328,9 @@ For a finite terminal metric sample $\{z_i\}$, the function returns
 
 $$
 \left(
-\min z,\operatorname{percentile}_{10}z,
-\operatorname{median}z,
-\operatorname{percentile}_{90}z,
+\min z,\mathrm{percentile}_{10}z,
+\mathrm{median}z,
+\mathrm{percentile}_{90}z,
 \max z,N
 \right).
 $$
@@ -370,9 +370,9 @@ Grouped complete tags are traversed in terminal-summary mode. For each group, th
 For curves $a_{i,j}$ with unequal lengths, the function pads to `NaN` and computes
 
 $$
-\tilde a_j=\operatorname{median}_i(a_{i,j}),\qquad
-a_j^{10}=\operatorname{percentile}_{10,i}(a_{i,j}),\qquad
-a_j^{90}=\operatorname{percentile}_{90,i}(a_{i,j}).
+\tilde a_j=\mathrm{median}_i(a_{i,j}),\qquad
+a_j^{10}=\mathrm{percentile}_{10,i}(a_{i,j}),\qquad
+a_j^{90}=\mathrm{percentile}_{90,i}(a_{i,j}).
 $$
 
 Only ranks with at least one finite value are retained.
@@ -383,7 +383,7 @@ For directions $\theta_i$, the circular mean is
 
 $$
 \bar\theta=
-\operatorname{atan2}\left(
+\mathrm{atan2}\left(
 \frac1N\sum_i\sin\theta_i,\,
 \frac1N\sum_i\cos\theta_i
 \right),
@@ -396,7 +396,7 @@ returned in degrees on $[-180^\circ,180^\circ)$.
 For current CSV rows with matching geometry, the map value is accumulated by `tri_num`. When mesh centroids are supplied, centroid-tagged samples are first remapped to the nearest current mesh triangle within a scale-aware tolerance. This makes old scalar CSVs robust to stale triangle ordering while preserving the physical triangle identity. For each triangle $r$, the map value is either
 
 $$
-\operatorname{median}\{z_{r,i}\}_i
+\mathrm{median}\{z_{r,i}\}_i
 $$
 
 or, for circular directions, `circular_mean_degrees`. Missing triangles remain `NaN`.
@@ -491,7 +491,7 @@ The function replaces non-finite raster values by the finite median.
 $$
 z'_{ij}=
 \begin{cases}
-\operatorname{median}(z), & z_{ij}\notin\mathbb R,\\
+\mathrm{median}(z), & z_{ij}\notin\mathbb R,\\
 z_{ij}, & \mathrm{otherwise}.
 \end{cases}
 $$
@@ -547,7 +547,7 @@ The returned residual grid is reshaped to the input raster shape.
 The base colormap value $C(z)$ is multiplied by a hillshade factor $S(z)$.
 
 $$
-\mathrm{rgb}=\operatorname{clip}\left(C(z)\,[0.72+0.35S(z)]+0.02,0,1\right).
+\mathrm{rgb}=\mathrm{clip}\left(C(z)\,[0.72+0.35S(z)]+0.02,0,1\right).
 $$
 
 The vertical exaggeration in the hillshade is larger for residual panels than for elevation panels.
@@ -557,7 +557,7 @@ The vertical exaggeration in the hillshade is larger for residual panels than fo
 For raster cell distance $d_{ij}$ to the nearest edge and margin $m$, the alpha multiplier is
 
 $$
-\alpha_{ij}=\operatorname{clip}\left(\frac{d_{ij}}{m},0,1\right)^{0.75}.
+\alpha_{ij}=\mathrm{clip}\left(\frac{d_{ij}}{m},0,1\right)^{0.75}.
 $$
 
 This fades the hero terrain relief toward the raster boundary.
@@ -758,8 +758,8 @@ through a centred diverging normalization with tick labels at negative limit, ze
 The preprocessing composite places the hero map and three rendered terrain stages on a $170\times120$ mm canvas. The residual color scale uses
 
 $$
-h'_{\max}=\operatorname{clip}\left(
-\operatorname{percentile}_{98.5}(|h'|),500,1900
+h'_{\max}=\mathrm{clip}\left(
+\mathrm{percentile}_{98.5}(|h'|),500,1900
 \right).
 $$
 
@@ -1062,9 +1062,9 @@ The function returns the finite-sample band
 $$
 \left(\tilde r,p_{10},p_{90}\right)=
 \left(
-\operatorname{median}(r),
-\operatorname{percentile}_{10}(r),
-\operatorname{percentile}_{90}(r)
+\mathrm{median}(r),
+\mathrm{percentile}_{10}(r),
+\mathrm{percentile}_{90}(r)
 \right).
 $$
 

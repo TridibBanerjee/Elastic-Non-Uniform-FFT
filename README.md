@@ -2,8 +2,10 @@
 
 ![Elastic Non-Uniform FFT logo](enufft_logo_2.png)
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20544459-blue.svg)](https://doi.org/10.5281/zenodo.20544459)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.20544459"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20544459-blue.svg" alt="DOI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue.svg" alt="License: Apache-2.0"></a>
+</p>
 
 ENUFFT is a framework that computes local Fourier coefficients directly from irregular DEM samples without physical interpolation. A shape-aware elastic mode-selection algorithm then selects a cell and flow-dependent number of retained modes that preserves a target fraction of launch-relevant power.
 

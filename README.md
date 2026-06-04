@@ -3,8 +3,8 @@
 ![Elastic Non-Uniform FFT logo](enufft_logo_2.png)
 
 <p align="center">
-  <a href="https://doi.org/10.5281/zenodo.20544458"><img src="https://img.shields.io/badge/Code%20DOI-10.5281%2Fzenodo.20544458-blue.svg" alt="Code DOI"></a>
-  <a href="https://doi.org/10.5281/zenodo.20545261"><img src="https://img.shields.io/badge/Dataset%20DOI-10.5281%2Fzenodo.20545261-blue.svg" alt="Dataset DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.20544458"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20544458-blue.svg" alt="DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.20545261"><img src="https://img.shields.io/badge/Dataset-10.5281%2Fzenodo.20545261-blue.svg" alt="Dataset"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue.svg" alt="License: Apache-2.0"></a>
 </p>
 

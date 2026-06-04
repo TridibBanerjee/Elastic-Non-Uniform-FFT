@@ -6,8 +6,6 @@ ENUFFT is a framework that computes local Fourier coefficients directly from irr
 
 ## Overview
 
-The overview below is meant to anchor the implementation in the notation used by the manuscript. Two shared cores are summarized: Elastic Mode Selection for sparse spectral retention, and the quadrature NUFFT path for irregular terrain samples.
-
 Two reusable compute cores are provided. Quadrature-based Fourier coefficients from irregular terrain samples are evaluated by `Module_Nufft.py`. Any nonnegative spectrum is compressed into an adaptive retained mode count by `Module_Ems.py`. These cores are combined by the case drivers with geometry, preprocessing, comparison, and figure-construction code for the synthetic NUFFT check, the EMS theory panels, the monochromatic unstructured-cell test, the Alpine SRTM sweep, and the mountain-wave EMS extraction.
 
 ### EMS Core
@@ -24,10 +22,10 @@ The participation ratio is
 
 $$
 N_{\mathrm{eff}}=
-\frac{\left(\sum_{j=1}^{J^\star}E_{(j)}\right)^2}
+\frac{(\sum_{j=1}^{J^\star}E_{(j)})^2}
 {\sum_{j=1}^{J^\star}E_{(j)}^2},
 \qquad
-N_{\mathrm{eff}}^{\mathrm{clip}}=\min\left(N_{\mathrm{eff}},K_{\max}\right).
+N_{\mathrm{eff}}^{\mathrm{clip}}=\min(N_{\mathrm{eff}},K_{\max}).
 $$
 
 The local shape of the leading spectrum is measured by the gap ratios
@@ -37,7 +35,7 @@ G_j=\frac{E_{(j)}}{E_{(j+1)}},
 \qquad
 j=1,\ldots,J_{\mathrm{window}}-1,
 \qquad
-J_{\mathrm{window}}=\min\left(J^\star,K_{\max}\right),
+J_{\mathrm{window}}=\min(J^\star,K_{\max}),
 $$
 
 and by the neighbor-similarity score
@@ -46,7 +44,7 @@ $$
 S_\delta=
 \frac{1}{J_{\mathrm{window}}-1}
 \sum_{j=1}^{J_{\mathrm{window}}-1}
-\exp\left[-\frac{G_j-1}{\delta}\right]
+\exp[-\frac{G_j-1}{\delta}]
 $$
 
 when $J_{\mathrm{window}}>1$. If only one admissible entry is present, $S_\delta=1$. The blended EMS control variable is written in the manuscript notation as
@@ -61,7 +59,7 @@ from which the target retained fraction is obtained as
 
 $$
 \alpha_C=
-\alpha_{\min}+\left(\alpha_{\max}-\alpha_{\min}\right)\mathcal C.
+\alpha_{\min}+(\alpha_{\max}-\alpha_{\min})\mathcal C.
 $$
 
 The cumulative retained fraction is
@@ -74,9 +72,9 @@ and the selected count is
 
 $$
 K^\star=
-\min\left\{K_{\max},
-\max\left[K_{\min},
-\min\left\{K:\vartheta(K)\ge\alpha_C\right\}\right]\right\}.
+\min(K_{\max},
+\max[K_{\min},
+\min\{K:\vartheta(K)\ge\alpha_C\}]).
 $$
 
 This rule is implemented in `Module_Ems.py` by `elastic_mode_selection`. For Fourier coefficient blocks, signed non-DC modes are first grouped by `select_sparse_conjugate_modes` into physical conjugate pairs $g=\{\pm(m,n)\}$, with pair energy
@@ -98,14 +96,13 @@ $$
 from irregular DEM samples
 
 $$
-\bigl\{x_q,y_q,h_q\bigr\}_{q=1}^{Q}.
+\{x_q,y_q,h_q\}_{q=1}^{Q}.
 $$
 
 The continuous coefficient convention is taken from the manuscript
 
 $$
-\hat h_{m,n}
-=
+\hat h_{m,n}=
 \frac{1}{|D|}
 \int_0^{L_x}\int_0^{L_y}
 h(x,y)\exp[-i(k_mx+\ell_ny)]\,dy\,dx,
@@ -120,7 +117,7 @@ The same signed complex convention is evaluated by the code. Optional quadrature
 $$
 h_q^\ast=
 \begin{cases}
-h_q, & w_q\ \mathrm{absent},\\[4pt]
+h_q, & w_q\ \mathrm{absent},\\
 h_q\dfrac{w_q}{\sum_r w_r}Q, & w_q\ \mathrm{present},
 \end{cases}
 $$
@@ -128,8 +125,7 @@ $$
 so that the weighted and unweighted coefficient formula can be written as
 
 $$
-\hat h_{m,n}^{\mathrm{DFT}}
-=
+\hat h_{m,n}^{\mathrm{DFT}}=
 \frac{1}{Q}
 \sum_{q=1}^{Q}h_q^\ast
 \exp[-i(k_mx_q+\ell_ny_q)].
@@ -139,10 +135,10 @@ An even auxiliary grid is built by the accelerated path with
 
 $$
 N_x^{\mathrm{aux}}
-=\max\left(\left\lceil2\sigma M_x\right\rceil,2M_x,2\right),
+=\max(\lceil2\sigma M_x\rceil,2M_x,2),
 \qquad
 N_y^{\mathrm{aux}}
-=\max\left(\left\lceil2\sigma M_y\right\rceil,2M_y,2\right),
+=\max(\lceil2\sigma M_y\rceil,2M_y,2),
 $$
 
 where
@@ -166,7 +162,7 @@ Samples are spread with the dimensionless Kaiser-Bessel kernel
 $$
 \varphi(\zeta)=
 \begin{cases}
-\dfrac{1}{I_0(\beta)}I_0\left[\gamma\sqrt{1-(\zeta/a)^2}\right], & |\zeta|\le a,\\[6pt]
+\dfrac{1}{I_0(\beta)}I_0[\gamma\sqrt{1-(\zeta/a)^2}], & |\zeta|\le a,\\
 0, & |\zeta|>a.
 \end{cases}
 $$
@@ -182,11 +178,10 @@ $$
 For the baseline comparison, $\gamma=\beta$ is set. The spread field is
 
 $$
-\tilde h_{j,i}
-=
+\tilde h_{j,i}=
 \sum_{q=1}^{Q}h_q^\ast
-\varphi\left(\frac{x_q-x_i^{\mathrm{aux}}}{d_x^{\mathrm{aux}}}\right)
-\varphi\left(\frac{y_q-y_j^{\mathrm{aux}}}{d_y^{\mathrm{aux}}}\right),
+\varphi(\frac{x_q-x_i^{\mathrm{aux}}}{d_x^{\mathrm{aux}}})
+\varphi(\frac{y_q-y_j^{\mathrm{aux}}}{d_y^{\mathrm{aux}}}),
 $$
 
 with periodic shortest-distance wrapping in each direction and compact support supplied by $\varphi$. The grid-space normalization is then applied as
@@ -201,8 +196,7 @@ $$
 A standard FFT is then used to obtain
 
 $$
-\hat{\tilde h}_{m,n}
-=
+\hat{\tilde h}_{m,n}=
 \frac{1}{N_x^{\mathrm{aux}}N_y^{\mathrm{aux}}}
 \operatorname{FFT2}(\tilde h)_{m,n}.
 $$
@@ -210,8 +204,7 @@ $$
 Deconvolution is performed by division through the grid-space Fourier transform of the one-dimensional spreading kernel in each direction
 
 $$
-\hat h_{m,n}^{\mathrm{NUFFT}}
-=
+\hat h_{m,n}^{\mathrm{NUFFT}}=
 \frac{\hat{\tilde h}_{m,n}}
 {\Phi(k_m)\Phi(\ell_n)}.
 $$
@@ -221,7 +214,7 @@ For a wavenumber $\kappa$ and matching auxiliary spacing $d_\kappa$, the transfo
 $$
 \Phi(\kappa)=
 \frac{2a}{I_0(\beta)}
-\frac{\sinh\left[\sqrt{\gamma^2-(a\kappa d_\kappa)^2}\right]}
+\frac{\sinh[\sqrt{\gamma^2-(a\kappa d_\kappa)^2}]}
 {\sqrt{\gamma^2-(a\kappa d_\kappa)^2}},
 $$
 

@@ -132,8 +132,7 @@ and `polygon_area_2d(clipped)` is the area of the polygon restricted to the anal
 This helper combines the two previous operations:
 
 $$
-\texttt{polygon\_box\_intersection\_area}(\Omega_P,B)
-=
+\texttt{polygon\_box\_intersection\_area}(\Omega_P,B)=
 \lvert\Omega_P\cap B\rvert.
 $$
 
@@ -471,8 +470,7 @@ The `chunk_size` parameter is passed through only to the normal-equation assembl
 CSA first fits all dense candidates on the FA support,
 
 $$
-c_j^{\mathrm{FA}}
-=
+c_j^{\mathrm{FA}}=
 \arg\min_c
 \left\lVert
 \sum_j c_j e^{i(k_{m_j}x_q^{\mathrm{FA}}+\ell_{n_j}y_q^{\mathrm{FA}})}
@@ -490,8 +488,7 @@ $$
 The largest $S_{\mathrm{CSA}}$ candidates form $\mathcal M_S$. The SA step then refits only $\mathcal M_S$ on the target support,
 
 $$
-c_j^{\mathrm{SA}}
-=
+c_j^{\mathrm{SA}}=
 \arg\min_c
 \left\lVert
 \sum_{j\in\mathcal M_S} c_j e^{i(k_{m_j}x_q^{\mathrm{SA}}+\ell_{n_j}y_q^{\mathrm{SA}})}
@@ -649,8 +646,7 @@ $$
 where $\rho_{\mathrm{mono}}$ is computed by `mono_ridge_density`. For `distribution="mild"`, `"moderate"`, or `"strong"`, the density is a land-sea-coast density. First, the parameters are
 
 $$
-(\rho_{\mathrm{sea}},B_{\mathrm{coast}})
-=
+(\rho_{\mathrm{sea}},B_{\mathrm{coast}})=
 \begin{cases}
 (0.70,0.40), & \text{mild},\\
 (0.35,0.90), & \text{moderate},\\
@@ -661,8 +657,7 @@ $$
 For a trial point $(x_j^\ast,y_j^\ast)$, the coastline location is $x_{\mathrm{coast}}(y_j^\ast)$. The base density is
 
 $$
-\rho_{\mathrm{base},j}
-=
+\rho_{\mathrm{base},j}=
 \begin{cases}
 1, & x_j^\ast\ge x_{\mathrm{coast}}(y_j^\ast),\\
 \rho_{\mathrm{sea}}, & x_j^\ast<x_{\mathrm{coast}}(y_j^\ast).
@@ -680,8 +675,7 @@ $$
 The final raw density is
 
 $$
-\rho_j^\ast
-=
+\rho_j^\ast=
 \rho_{\mathrm{base},j}
 \left(1+B_{\mathrm{coast}}e^{-d_j^2}\right).
 $$
@@ -997,8 +991,7 @@ $$
 The Parseval-pair energy is
 
 $$
-E_{m,n}^{\pm}
-=
+E_{m,n}^{\pm}=
 \lvert\hat h_{m,n}\rvert^2
 +\lvert\hat h_{-m,-n}\rvert^2.
 $$
@@ -1494,8 +1487,7 @@ For one triangle, `get_analysis_window` builds the local support. The square sup
 For edge-aligned windows, points are rotated by the longest-edge angle $\theta$.
 
 $$
-\begin{bmatrix}x'\\y'\end{bmatrix}
-=
+\begin{bmatrix}x'\\y'\end{bmatrix}=
 \begin{bmatrix}\cos(-\theta)&-\sin(-\theta)\\ \sin(-\theta)&\cos(-\theta)\end{bmatrix}
 \begin{bmatrix}x\\y\end{bmatrix}.
 $$

@@ -741,8 +741,7 @@ plus the DC coefficient. Each row stores the sweep coordinates, method label, si
 For one support, weighting rule, and oversampling factor, the function computes
 
 $$
-\hat h_{m,n}^{\mathrm{nufft}}
-=
+\hat h_{m,n}^{\mathrm{nufft}}=
 \mathrm{ENUFFT}\left(\{x_q,y_q,h_q,w_q\}_{q\in\mathcal W}\right),
 $$
 

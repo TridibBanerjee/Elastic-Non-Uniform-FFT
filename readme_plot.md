@@ -1060,8 +1060,7 @@ The summary table is grouped into Square, Tri., Circle, and CSA arrays for a req
 The function returns the finite-sample band
 
 $$
-\left(\tilde r,p_{10},p_{90}\right)
-=
+\left(\tilde r,p_{10},p_{90}\right)=
 \left(
 \operatorname{median}(r),
 \operatorname{percentile}_{10}(r),

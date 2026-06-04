@@ -242,10 +242,6 @@ If the repository was cloned without submodules, initialize the public PinCFlow 
 git submodule update --init --recursive
 ```
 
-The Python drivers use `numpy`, `scipy`, `matplotlib`, `Pillow`, and `h5py`. The Alps preprocessing path also needs local SRTM input tiles before `Code_Alps_Preprocess.py` can build `srtm_alps/alps_dem_processed.npz`.
-
-The tracked repository is intentionally limited to named code and README files. Generated `csv/`, `figures/`, local DEM archives under `srtm_alps/`, caches, and HDF5 run products are ignored. The mountain-wave extraction driver expects the local PinCFlow EMS output file `PinCFlow-EMS/Banerjee_2026_Enufft_MountainWaveEms.h5` when that case is regenerated.
-
 ## Documentation Index
 
 The remaining documentation is split into three short references. Shared numerical routines are in Modules. Case drivers and data flow are in Code. Figure-construction helpers are in Plot.

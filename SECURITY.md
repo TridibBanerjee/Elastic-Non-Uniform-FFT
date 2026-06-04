@@ -36,6 +36,4 @@ Please include:
 - The expected impact.
 - Any suggested fix or mitigation.
 
-I will acknowledge reports as soon as possible and aim to provide an initial assessment within 7 days. If the report is accepted, I will coordinate a fix and release/update the repository as appropriate. If the report is declined, I will explain why.
-
 For ordinary numerical bugs, documentation issues, or reproducibility problems that do not involve security, please open a normal GitHub issue.

@@ -242,6 +242,14 @@ If the repository was cloned without submodules, initialize the public PinCFlow 
 git submodule update --init --recursive
 ```
 
+## License
+
+This repository is licensed under the Apache License 2.0. See [LICENSE](LICENSE).
+
+Attribution notices for the ENUFFT framework are provided in [NOTICE](NOTICE). If you use ENUFFT in scholarly, published, or publicly distributed work, please cite it using [CITATION.cff](CITATION.cff).
+
+The `PinCFlow-EMS` submodule is a separate project with its own license. See [PinCFlow-EMS/LICENSE.md](PinCFlow-EMS/LICENSE.md).
+
 ## Documentation Index
 
 The remaining documentation is split into three short references. Shared numerical routines are in Modules. Case drivers and data flow are in Code. Figure-construction helpers are in Plot.

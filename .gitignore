@@ -4,6 +4,9 @@
 # Repository metadata needed for the curated code bundle.
 !/.gitignore
 !/.gitmodules
+!/LICENSE
+!/NOTICE
+!/CITATION.cff
 !/PinCFlow-EMS
 !/PinCFlow-EMS/
 

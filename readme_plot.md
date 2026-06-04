@@ -180,7 +180,7 @@ This keeps roughly ten visible markers on each median spectral curve.
 For values $z_i$ and bin edges $b_k$, the histogram counts are
 
 $$
-c_k=\#\{i:b_k\le z_i<b_{k+1}\}.
+c_k=\lvert\{i:b_k\le z_i\lt b_{k+1}\}\rvert.
 $$
 
 The count staircase is drawn, and for hatched methods a transparent bar layer with the same bin widths is added.
@@ -500,11 +500,11 @@ This prevents rendering helpers from receiving `NaN` surfaces.
 
 ##### `orient_y_ascending`
 
-If $y_0>y_{N_y-1}$, the function reverses both $y$ and the raster rows.
+If $y$ is descending, the function sets $\bar j=N_y-1-j$ and reverses both $y$ and the raster rows.
 
 $$
-y'_j=y_{N_y-1-j},\qquad
-z'_{j,i}=z_{N_y-1-j,i}.
+y'_j=y_{\bar j},\qquad
+z'_{j,i}=z_{\bar j,i}.
 $$
 
 It calls `finite_field` before orientation.
@@ -517,7 +517,7 @@ $$
 s=\max(1,\lceil\frac{N_x}{N_x^\ast}\rceil).
 $$
 
-The returned raster is $(x_{0:s:N_x},y_{0:s:N_y},z_{0:s:N_y,0:s:N_x})$ and the stride $s$.
+The returned raster is `(x[0:s:Nx], y[0:s:Ny], z[0:s:Ny, 0:s:Nx])` and the stride $s$.
 
 ##### `regular_icon_like_triangles_for_viz`
 
@@ -769,9 +769,7 @@ The exported files are `Banerjee_2026_Enufft_Alps_Viz.png` and `.pdf`.
 
 For current proxy tags, the function extracts the leading mesh prefix.
 
-$$
-\mathrm{\_r2b5\_N32\_...}\mapsto \mathrm{r2b5}.
-$$
+Tags such as `_r2b5_N32_...` map to the mesh name `r2b5`.
 
 Tags without an `r2b4` or `r2b5` prefix return no mesh name.
 
@@ -823,7 +821,7 @@ Case-level figure builder from the saved numerical tables.
 The terrain table is reconstructed as
 
 $$
-\{x_q,y_q,h_q^{\mathrm{multi}},h_q^{\mathrm{ridge}},h_q^{\mathrm{basin}}\}_{q=1}^{Q}.
+\{(x_q,y_q,h_q^{\mathrm{multi}},h_q^{\mathrm{ridge}},h_q^{\mathrm{basin}}):q=1,\ldots,Q\}.
 $$
 
 The function returns $\{x_q\}$, $\{y_q\}$, and the three sampled terrain arrays.
@@ -833,9 +831,9 @@ The function returns $\{x_q\}$, $\{y_q\}$, and the three sampled terrain arrays.
 The modes table is reduced to the pooled sets
 
 $$
-\{|e_{m,n}^{\mathrm{opt}}|\}_{m,n},
+\{|e_{m,n}^{\mathrm{opt}}|:m,n\},
 \qquad
-\{|e_{m,n}^{\mathrm{base}}|\}_{m,n},
+\{|e_{m,n}^{\mathrm{base}}|:m,n\},
 $$
 
 already aggregated over all terrain cases.

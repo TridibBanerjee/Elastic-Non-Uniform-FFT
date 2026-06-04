@@ -219,7 +219,7 @@ $$
 For each task it initializes the Alps worker globals for the corresponding case and evaluates
 
 $$
-R_{(c_j,r_j)}=\mathrm{process\_alps\_triangle}(r_j).
+R_j=\mathrm{process\_alps\_triangle}(r_j).
 $$
 
 The rank writes one atomic `_Rank_######.pkl` chunk file containing all of its rows. No CSV summaries are accumulated in worker completion order.

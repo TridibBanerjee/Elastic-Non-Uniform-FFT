@@ -420,7 +420,7 @@ The returned array stores each candidate as `(m_mode, n_mode)`.
 For a mode list $\mathcal M$, the synthesis matrix is
 
 $$
-B_{q,j}=e^{i(k_{m_j}x_q+\ell_{n_j}y_q)}.
+B_{q,j}=e^{i(k_{m(j)}x_q+\ell_{n(j)}y_q)}.
 $$
 
 The function assembles
@@ -473,7 +473,7 @@ $$
 c_j^{\mathrm{FA}}=
 \arg\min_c
 \lVert
-\sum_j c_j e^{i(k_{m_j}x_q^{\mathrm{FA}}+\ell_{n_j}y_q^{\mathrm{FA}})}
+\sum_j c_j e^{i(k_{m(j)}x_q^{\mathrm{FA}}+\ell_{n(j)}y_q^{\mathrm{FA}})}
 -h_q^{\mathrm{FA}}
 \rVert_2^2
 +\lambda_{\mathrm{FA}}\lVert c\rVert_2^2,
@@ -491,7 +491,7 @@ $$
 c_j^{\mathrm{SA}}=
 \arg\min_c
 \lVert
-\sum_{j\in\mathcal M_S} c_j e^{i(k_{m_j}x_q^{\mathrm{SA}}+\ell_{n_j}y_q^{\mathrm{SA}})}
+\sum_{j\in\mathcal M^{S}} c_j e^{i(k_{m(j)}x_q^{\mathrm{SA}}+\ell_{n(j)}y_q^{\mathrm{SA}})}
 -h_q^{\mathrm{SA}}
 \rVert_2^2
 +\lambda_{\mathrm{SA}}\lVert c\rVert_2^2,
@@ -1289,11 +1289,11 @@ with `float32` storage by default. The saved archive contains projected coordina
 
 ##### `orient_y_ascending`
 
-If the coordinate vector has $y_0>y_{N_y-1}$, the function returns
+If the coordinate vector is descending, the function sets $\bar j=N_y-1-j$ and returns
 
 $$
-y'_j=y_{N_y-1-j},\qquad
-z'_{j,i}=z_{N_y-1-j,i}.
+y'_j=y_{\bar j},\qquad
+z'_{j,i}=z_{\bar j,i}.
 $$
 
 If $y$ is already ascending, the arrays are returned unchanged.
@@ -1310,7 +1310,7 @@ $$
 It also builds a regular-grid interpolator on $(y_j,x_i)$ and stores
 
 $$
-L_x=x_{N_x-1}-x_0,\qquad L_y=y_{N_y-1}-y_0.
+L_x=x_{\mathrm{last}}-x_0,\qquad L_y=y_{\mathrm{last}}-y_0.
 $$
 
 ##### `cell_diagonal_code`
@@ -1608,17 +1608,17 @@ This avoids pickling the full DEM for every triangle task when the forked pool s
 For triangle $T_r$, the function builds the local window samples
 
 $$
-\{x_q^{\mathrm{loc}},y_q^{\mathrm{loc}},h_q'\}_{q\in D_r}.
+\{(x_q^{\mathrm{loc}},y_q^{\mathrm{loc}},h_q'):\ q\in D\}.
 $$
 
 It computes the raw ENUFFT block $\hat h_{m,n}^{\mathrm{raw}}$, selects the EMS sparse ENUFFT block $\hat h_{m,n}^{\mathrm{ENUFFT}}$, and computes the CSA block $\hat h_{m,n}^{\mathrm{CSA}}$ on the square reference support. Reconstruction diagnostics on the target triangle use
 
 $$
 \mathrm{RMSE}=
-\sqrt{\frac1{Q_T}\sum_{q\in T_r}
+\sqrt{\frac1{Q_T}\sum_{q\in T}
 (h_q^{\mathrm{rec}}-h_q')^2},
 \qquad
-\mathrm{relRMSE}=\frac{\mathrm{RMSE}}{\mathrm{std}_{q\in T_r}(h_q')}.
+\mathrm{relRMSE}=\frac{\mathrm{RMSE}}{\mathrm{std}_{q\in T}(h_q')}.
 $$
 
 When the target triangle has reference standard deviation at or below `1 m`, `rel_rmse_en` and `rel_rmse_csa` are written as `NaN` because the relative normalization is not meaningful for flat or nearly flat terrain. The absolute `rmse_en` and `rmse_csa` values are still stored, so these cells remain diagnosable without creating artificial small-denominator outliers in pooled relative-RMSE summaries. It also stores $K^\star$, dominant mode direction, non-DC spectral variance, sorted amplitudes, point counts, triangle geometry, and `metric_version` so old summary CSVs are not reused after metric semantics change.

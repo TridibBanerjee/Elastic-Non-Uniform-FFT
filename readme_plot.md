@@ -37,10 +37,10 @@ The Alps figure font, tick, hatch, spine, and backend settings are applied by th
 The function converts one CSV field to the plotting scalar used downstream.
 
 $$
-\texttt{""}\mapsto \mathrm{NaN},\quad
-\texttt{"true"}\mapsto \mathrm{True},\quad
-\texttt{"false"}\mapsto \mathrm{False},\quad
-\texttt{"1.25"}\mapsto 1.25.
+\mathrm{""}\mapsto \mathrm{NaN},\quad
+\mathrm{"true"}\mapsto \mathrm{True},\quad
+\mathrm{"false"}\mapsto \mathrm{False},\quad
+\mathrm{"1.25"}\mapsto 1.25.
 $$
 
 Finite floating-point values with integer value are converted to integers so triangle ids and ranks remain discrete.
@@ -50,7 +50,7 @@ Finite floating-point values with integer value are converted to integers so tri
 For a CSV table with rows $r_i$ and columns $c_j$, the function returns dictionaries
 
 $$
-\left\{\{c_j:\mathrm{parse\_scalar}(r_{ij})\}_j\right\}_i.
+\{\{c_j:\mathrm{parse\_scalar}(r_{ij})\}_j\}_i.
 $$
 
 It is the only scalar table reader used by the Alps plot paths.
@@ -60,7 +60,7 @@ It is the only scalar table reader used by the Alps plot paths.
 Given a filename
 
 $$
-\texttt{Banerjee\_2026\_Enufft\_Alps\_PerTriangle}\tau\texttt{.csv},
+\mathrm{Banerjee\_2026\_Enufft\_Alps\_PerTriangle}\tau\mathrm{.csv},
 $$
 
 the function returns the configuration tag $\tau$. This tag is later reused to locate the matching `Summary` and `Spectra` CSV files.
@@ -70,11 +70,11 @@ the function returns the configuration tag $\tau$. This tag is later reused to l
 For a tag $\tau$, the function returns
 
 $$
-\left(
-D_{\mathrm{csv}}/O_1\tau\texttt{.csv},
-D_{\mathrm{csv}}/O_2\tau\texttt{.csv},
-D_{\mathrm{csv}}/O_3\tau\texttt{.csv}
-\right),
+(
+D_{\mathrm{csv}}/O_1\tau\mathrm{.csv},
+D_{\mathrm{csv}}/O_2\tau\mathrm{.csv},
+D_{\mathrm{csv}}/O_3\tau\mathrm{.csv}
+),
 $$
 
 where $O_1$, $O_2$, and $O_3$ are the per-triangle, summary, and spectra filename prefixes.
@@ -84,8 +84,8 @@ where $O_1$, $O_2$, and $O_3$ are the per-triangle, summary, and spectra filenam
 A discovered tag is accepted only when it has the current fixed proxy-mesh shape.
 
 $$
-\tau=\texttt{\_r2b[45]\_}\cdots\texttt{\_dx}\Delta_{\mathrm{cell}}
-\left[\texttt{\_first}N\right].
+\tau=\mathrm{\_r2b[45]\_}\cdots\mathrm{\_dx}\Delta_{\mathrm{cell}}
+[\mathrm{\_first}N].
 $$
 
 This excludes older actual-grid or pre-port outputs without a mesh prefix and `_dx...` suffix.
@@ -120,7 +120,7 @@ The spectra CSV stores rows $(r,\mathrm{method},j,a_j)$. The function reconstruc
 
 $$
 (r,\mathrm{method})\mapsto
-\left[a_1,a_2,\ldots,a_R\right],
+[a_1,a_2,\ldots,a_R],
 $$
 
 with rank $j$ stored at zero-based Python index $j-1$.
@@ -130,7 +130,7 @@ with rank $j$ stored at zero-based Python index $j-1$.
 For a figure stem $s$, the output path is
 
 $$
-p_{\mathrm{fig}}=\texttt{./figures/}s\texttt{.png}.
+p_{\mathrm{fig}}=\mathrm{./figures/}s\mathrm{.png}.
 $$
 
 The figure directory is created before the path is returned.
@@ -170,7 +170,7 @@ as a translucent band. If a hatch is supplied, a second transparent filled band 
 For $N$ plotted ranks, the marker cadence is
 
 $$
-m=\max\left(1,\left\lceil\frac{N}{10}\right\rceil\right).
+m=\max(1,\lceil\frac{N}{10}\rceil).
 $$
 
 This keeps roughly ten visible markers on each median spectral curve.
@@ -206,7 +206,7 @@ The function searches a filename for any known Alps window strategy and returns 
 The function extracts the full strategy $\mathcal W$ from a tagged filename by matching one of the six known values, for example
 
 $$
-\texttt{\_triangle\_centroid\_}\mapsto \mathrm{triangle\_centroid}.
+\mathrm{\_triangle\_centroid\_}\mapsto \mathrm{triangle\_centroid}.
 $$
 
 ##### `csa_pooled_spectra_key_from_filename`
@@ -327,12 +327,12 @@ $$
 For a finite terminal metric sample $\{z_i\}$, the function returns
 
 $$
-\left(
+(
 \min z,\mathrm{percentile}_{10}z,
 \mathrm{median}z,
 \mathrm{percentile}_{90}z,
 \max z,N
-\right).
+).
 $$
 
 If no finite sample exists, it returns no statistics.
@@ -383,10 +383,10 @@ For directions $\theta_i$, the circular mean is
 
 $$
 \bar\theta=
-\mathrm{atan2}\left(
+\mathrm{atan2}(
 \frac1N\sum_i\sin\theta_i,\,
 \frac1N\sum_i\cos\theta_i
-\right),
+),
 $$
 
 returned in degrees on $[-180^\circ,180^\circ)$.
@@ -514,7 +514,7 @@ It calls `finite_field` before orientation.
 For target width $N_x^\ast$, the stride is
 
 $$
-s=\max\left(1,\left\lceil\frac{N_x}{N_x^\ast}\right\rceil\right).
+s=\max(1,\lceil\frac{N_x}{N_x^\ast}\rceil).
 $$
 
 The returned raster is $(x_{0:s:N_x},y_{0:s:N_y},z_{0:s:N_y,0:s:N_x})$ and the stride $s$.
@@ -524,9 +524,9 @@ The returned raster is $(x_{0:s:N_x},y_{0:s:N_y},z_{0:s:N_y,0:s:N_x})$ and the s
 This visualization mesh uses the same vertex-count rule as the compute mesh.
 
 $$
-N_x^v=\left\lceil\frac{x_{\max}-x_{\min}}{\Delta_{\mathrm{R2B5}}}\right\rceil+1,
+N_x^v=\lceil\frac{x_{\max}-x_{\min}}{\Delta_{\mathrm{R2B5}}}\rceil+1,
 \qquad
-N_y^v=\left\lceil\frac{y_{\max}-y_{\min}}{\Delta_{\mathrm{R2B5}}}\right\rceil+1.
+N_y^v=\lceil\frac{y_{\max}-y_{\min}}{\Delta_{\mathrm{R2B5}}}\rceil+1.
 $$
 
 It returns a lightweight object with the same `points`, `simplices`, and `nsimplex` attributes expected by the plotting helpers, backed by the deterministic structured mesh.
@@ -547,7 +547,7 @@ The returned residual grid is reshaped to the input raster shape.
 The base colormap value $C(z)$ is multiplied by a hillshade factor $S(z)$.
 
 $$
-\mathrm{rgb}=\mathrm{clip}\left(C(z)\,[0.72+0.35S(z)]+0.02,0,1\right).
+\mathrm{rgb}=\mathrm{clip}(C(z)\,[0.72+0.35S(z)]+0.02,0,1).
 $$
 
 The vertical exaggeration in the hillshade is larger for residual panels than for elevation panels.
@@ -557,7 +557,7 @@ The vertical exaggeration in the hillshade is larger for residual panels than fo
 For raster cell distance $d_{ij}$ to the nearest edge and margin $m$, the alpha multiplier is
 
 $$
-\alpha_{ij}=\mathrm{clip}\left(\frac{d_{ij}}{m},0,1\right)^{0.75}.
+\alpha_{ij}=\mathrm{clip}(\frac{d_{ij}}{m},0,1)^{0.75}.
 $$
 
 This fades the hero terrain relief toward the raster boundary.
@@ -758,9 +758,9 @@ through a centred diverging normalization with tick labels at negative limit, ze
 The preprocessing composite places the hero map and three rendered terrain stages on a $170\times120$ mm canvas. The residual color scale uses
 
 $$
-h'_{\max}=\mathrm{clip}\left(
+h'_{\max}=\mathrm{clip}(
 \mathrm{percentile}_{98.5}(|h'|),500,1900
-\right).
+).
 $$
 
 The exported files are `Banerjee_2026_Enufft_Alps_Viz.png` and `.pdf`.
@@ -770,7 +770,7 @@ The exported files are `Banerjee_2026_Enufft_Alps_Viz.png` and `.pdf`.
 For current proxy tags, the function extracts the leading mesh prefix.
 
 $$
-\texttt{\_r2b5\_N32\_...}\mapsto \mathrm{r2b5}.
+\mathrm{\_r2b5\_N32\_...}\mapsto \mathrm{r2b5}.
 $$
 
 Tags without an `r2b4` or `r2b5` prefix return no mesh name.
@@ -823,7 +823,7 @@ Case-level figure builder from the saved numerical tables.
 The terrain table is reconstructed as
 
 $$
-\left\{x_q,y_q,h_q^{\mathrm{multi}},h_q^{\mathrm{ridge}},h_q^{\mathrm{basin}}\right\}_{q=1}^{Q}.
+\{x_q,y_q,h_q^{\mathrm{multi}},h_q^{\mathrm{ridge}},h_q^{\mathrm{basin}}\}_{q=1}^{Q}.
 $$
 
 The function returns $\{x_q\}$, $\{y_q\}$, and the three sampled terrain arrays.
@@ -833,9 +833,9 @@ The function returns $\{x_q\}$, $\{y_q\}$, and the three sampled terrain arrays.
 The modes table is reduced to the pooled sets
 
 $$
-\left\{|e_{m,n}^{\mathrm{opt}}|\right\}_{m,n},
+\{|e_{m,n}^{\mathrm{opt}}|\}_{m,n},
 \qquad
-\left\{|e_{m,n}^{\mathrm{base}}|\right\}_{m,n},
+\{|e_{m,n}^{\mathrm{base}}|\}_{m,n},
 $$
 
 already aggregated over all terrain cases.
@@ -845,7 +845,7 @@ already aggregated over all terrain cases.
 The plotted variable is
 
 $$
-e=\log_{10}\left(|e_{m,n}|+\varepsilon\right),
+e=\log_{10}(|e_{m,n}|+\varepsilon),
 $$
 
 with $\varepsilon=10^{-14}$ for finite logarithms at zero error. The panel shows the empirical PDFs of $e$ for the optimized and baseline kernels, together with the two medians.
@@ -866,11 +866,11 @@ The function builds
 
 $$
 \mathcal F=
-\left[
+[
 \text{one histogram panel}
 +
 \text{three terrain panels}
-\right],
+],
 $$
 
 using the shared template style $\mathcal S$, then exports the PNG and PDF outputs.
@@ -897,7 +897,7 @@ Case-level figure builder for the EMS theory spectra.
 The function reconstructs each EMS panel payload as
 
 $$
-\left\{E_{(j)},\delta,w_1,w_2,\alpha_{\min},\alpha_{\max},K_{\min},K_{\max},N_{\mathrm{eff}},S_{\delta},\mathcal C,\alpha_C,K^{\star},\alpha_C^{\mathrm{final}}\right\}
+\{E_{(j)},\delta,w_1,w_2,\alpha_{\min},\alpha_{\max},K_{\min},K_{\max},N_{\mathrm{eff}},S_{\delta},\mathcal C,\alpha_C,K^{\star},\alpha_C^{\mathrm{final}}\}
 $$
 
 from the saved spectra and summary tables.
@@ -909,9 +909,9 @@ For one case, the sorted samples $\{E_{(j)}\}$ are passed through a PCHIP interp
 $$
 K^{\star},
 \qquad
-K_{\mathrm{N}}=\left\lceil K_{\max}N_{\mathrm{eff}}^{\mathrm{norm}}\right\rceil,
+K_{\mathrm{N}}=\lceil K_{\max}N_{\mathrm{eff}}^{\mathrm{norm}}\rceil,
 \qquad
-K_S=\left\lceil K_{\max}S_{\delta}\right\rceil.
+K_S=\lceil K_{\max}S_{\delta}\rceil.
 $$
 
 ##### `main`
@@ -919,9 +919,9 @@ $$
 The driver rebuilds the full $2\times 3$ EMS figure from the CSV tables, applies the shared plot template, and exports
 
 $$
-\texttt{./figures/Banerjee\_2026\_Enufft\_Ems.png}
+\mathrm{./figures/Banerjee\_2026\_Enufft\_Ems.png}
 \qquad\text{and}\qquad
-\texttt{./figures/Banerjee\_2026\_Enufft\_Ems.pdf}.
+\mathrm{./figures/Banerjee\_2026\_Enufft\_Ems.pdf}.
 $$
 
 #### `Plot_Mono.py`
@@ -976,7 +976,7 @@ It rebuilds geometry and sampled points, not the sweep Fourier results.
 The plotted region stripe angle is
 
 $$
-\theta=\tan^{-1}\left(\frac{n}{m}\right)\bmod 180^\circ.
+\theta=\tan^{-1}(\frac{n}{m})\bmod 180^\circ.
 $$
 
 The modulo is used because $(m,n)$ and $(-m,-n)$ have the same line orientation.
@@ -1060,12 +1060,12 @@ The summary table is grouped into Square, Tri., Circle, and CSA arrays for a req
 The function returns the finite-sample band
 
 $$
-\left(\tilde r,p_{10},p_{90}\right)=
-\left(
+(\tilde r,p_{10},p_{90})=
+(
 \mathrm{median}(r),
 \mathrm{percentile}_{10}(r),
 \mathrm{percentile}_{90}(r)
-\right).
+).
 $$
 
 ##### `nice_upper_bound`
@@ -1115,11 +1115,11 @@ The y-axis limit is set from the maximum finite direction error after rounding w
 The radar panel shows method-wise median and percentile bands for one scalar diagnostic. It closes the four method values into a polar polygon.
 
 $$
-\left[\tilde r_{\mathrm{Square}},
+[\tilde r_{\mathrm{Square}},
 \tilde r_{\mathrm{Tri.}},
 \tilde r_{\mathrm{Circle}},
 \tilde r_{\mathrm{CSA}},
-\tilde r_{\mathrm{Square}}\right].
+\tilde r_{\mathrm{Square}}].
 $$
 
 The median polygon $\tilde r$, filled $p_{10}$ to $p_{90}$ band, dotted percentile traces, direct median annotations, and low/high radial labels are drawn. The amplitude-error panel uses the log scale with positive floor $r_{\min}$.
@@ -1165,9 +1165,9 @@ with the radial ceiling set to `1.08` so labels can sit outside the unit ring.
 The driver reads `Banerjee_2026_Enufft_Mono_Summary.csv`, applies the shared plotting style, builds a `2 x 3` canvas, and exports
 
 $$
-\texttt{./figures/Banerjee\_2026\_Enufft\_Mono.png}
+\mathrm{./figures/Banerjee\_2026\_Enufft\_Mono.png}
 \qquad\text{and}\qquad
-\texttt{./figures/Banerjee\_2026\_Enufft\_Mono.pdf}.
+\mathrm{./figures/Banerjee\_2026\_Enufft\_Mono.pdf}.
 $$
 
 #### `Plot_Mountain.py`
@@ -1272,9 +1272,9 @@ The active part of the fine-grid topography is drawn as a 3D surface. The displa
 The helper creates `./figures` and exports both
 
 $$
-\texttt{./figures/Banerjee\_2026\_Enufft\_Mountain.png}
+\mathrm{./figures/Banerjee\_2026\_Enufft\_Mountain.png}
 \qquad\text{and}\qquad
-\texttt{./figures/Banerjee\_2026\_Enufft\_Mountain.pdf}.
+\mathrm{./figures/Banerjee\_2026\_Enufft\_Mountain.pdf}.
 $$
 
 ##### `main`

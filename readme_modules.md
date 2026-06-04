@@ -32,7 +32,7 @@ Generic helpers shared across ports.
 For ordered polygon vertices $p_i=(x_i,y_i)$, the function returns the positive shoelace area
 
 $$
-\lvert\Omega_P\rvert=\frac{1}{2}\left\lvert\sum_i x_i y_{i+1}-y_i x_{i+1}\right\rvert,
+\lvert\Omega_P\rvert=\frac{1}{2}\lvert\sum_i x_i y_{i+1}-y_i x_{i+1}\rvert,
 $$
 
 with cyclic indexing $p_{N}=p_0$. If fewer than three vertices are supplied, the polygon is degenerate and the area is zero.
@@ -63,7 +63,7 @@ $$
 The edge segment is
 
 $$
-p(t)=p_{\mathrm{prev}}+t\left(p_{\mathrm{curr}}-p_{\mathrm{prev}}\right),
+p(t)=p_{\mathrm{prev}}+t(p_{\mathrm{curr}}-p_{\mathrm{prev}}),
 \qquad 0\le t\le 1.
 $$
 
@@ -80,9 +80,9 @@ are the inequality values at the two edge endpoints. Along the edge,
 $$
 \begin{aligned}
 g(p(t))
-&=a\left[x_{\mathrm{prev}}+t(x_{\mathrm{curr}}-x_{\mathrm{prev}})\right]
- +b\left[y_{\mathrm{prev}}+t(y_{\mathrm{curr}}-y_{\mathrm{prev}})\right]+c\\
-&=g_{\mathrm{prev}}+t\left(g_{\mathrm{curr}}-g_{\mathrm{prev}}\right).
+&=a[x_{\mathrm{prev}}+t(x_{\mathrm{curr}}-x_{\mathrm{prev}})]
+ +b[y_{\mathrm{prev}}+t(y_{\mathrm{curr}}-y_{\mathrm{prev}})]+c\\
+&=g_{\mathrm{prev}}+t(g_{\mathrm{curr}}-g_{\mathrm{prev}}).
 \end{aligned}
 $$
 
@@ -95,7 +95,7 @@ $$
 then the edge has one endpoint with $g<0$ and one endpoint with $g>0$. The new polygon must include the point where this edge meets the current box side, i.e. where $g(p(t))=0$.
 
 $$
-g_{\mathrm{prev}}+t\left(g_{\mathrm{curr}}-g_{\mathrm{prev}}\right)=0,
+g_{\mathrm{prev}}+t(g_{\mathrm{curr}}-g_{\mathrm{prev}})=0,
 $$
 
 so
@@ -109,7 +109,7 @@ That gives the appended boundary vertex
 $$
 p_{\mathrm{cross}}
 =p_{\mathrm{prev}}
-+t_{\mathrm{cross}}\left(p_{\mathrm{curr}}-p_{\mathrm{prev}}\right).
++t_{\mathrm{cross}}(p_{\mathrm{curr}}-p_{\mathrm{prev}}).
 $$
 
 The second append keeps the current endpoint exactly when it satisfies the active inequality.
@@ -121,7 +121,7 @@ $$
 Therefore
 
 $$
-\texttt{clipped}
+\mathrm{clipped}
 =\Omega_P\cap[x_{\min},x_{\max}]\times[y_{\min},y_{\max}],
 $$
 
@@ -132,7 +132,7 @@ and `polygon_area_2d(clipped)` is the area of the polygon restricted to the anal
 This helper combines the two previous operations:
 
 $$
-\texttt{polygon\_box\_intersection\_area}(\Omega_P,B)=
+\mathrm{polygon\_box\_intersection\_area}(\Omega_P,B)=
 \lvert\Omega_P\cap B\rvert.
 $$
 
@@ -143,17 +143,17 @@ Both the ported mono triangular mask and the ported Alps triangular window use t
 The function returns the triangle-membership mask for the supplied points. For a point $p_q=(x_q,y_q)$ and triangle vertices $v_0,v_1,v_2$, the three signed edge tests are
 
 $$
-d_1(q)=\det\left(p_q-v_1,\ v_0-v_1\right),
+d_1(q)=\det(p_q-v_1,\ v_0-v_1),
 $$
 
 $$
-d_2(q)=\det\left(p_q-v_2,\ v_1-v_2\right),
+d_2(q)=\det(p_q-v_2,\ v_1-v_2),
 $$
 
 and
 
 $$
-d_3(q)=\det\left(p_q-v_0,\ v_2-v_0\right),
+d_3(q)=\det(p_q-v_0,\ v_2-v_0),
 $$
 
 where
@@ -180,7 +180,7 @@ Each determinant is the signed area test for one triangle edge. Points inside th
 The function returns the positive planar area of the triangle.
 
 $$
-\lvert\Omega_T\rvert=\frac{1}{2}\left\lvert(x_1-x_0)(y_2-y_0)-(y_1-y_0)(x_2-x_0)\right\rvert.
+\lvert\Omega_T\rvert=\frac{1}{2}\lvert(x_1-x_0)(y_2-y_0)-(y_1-y_0)(x_2-x_0)\rvert.
 $$
 
 This is one half of the absolute signed area $\det(v_1-v_0,v_2-v_0)$.
@@ -188,7 +188,7 @@ This is one half of the absolute signed area $\det(v_1-v_0,v_2-v_0)$.
 ##### `format_float`
 
 $$
-s(v)=\texttt{\%.18e}(v).
+s(v)=\mathrm{\%.18e}(v).
 $$
 
 The map is purely for stable serialization. A value written to CSV and read back again stays numerically unchanged along this serialization path.
@@ -225,9 +225,9 @@ Shared ENUFFT pipeline for the irregular-sample Fourier calculation.
 ##### `build_auxiliary_grid`
 
 $$
-N_x^{\mathrm{aux}}=\max\left(\left\lceil 2\sigma N_{\max,x}^{\mathrm{mode}}\right\rceil,2N_{\max,x}^{\mathrm{mode}},2\right),
+N_x^{\mathrm{aux}}=\max(\lceil 2\sigma N_{\max,x}^{\mathrm{mode}}\rceil,2N_{\max,x}^{\mathrm{mode}},2),
 \qquad
-N_y^{\mathrm{aux}}=\max\left(\left\lceil 2\sigma N_{\max,y}^{\mathrm{mode}}\right\rceil,2N_{\max,y}^{\mathrm{mode}},2\right),
+N_y^{\mathrm{aux}}=\max(\lceil 2\sigma N_{\max,y}^{\mathrm{mode}}\rceil,2N_{\max,y}^{\mathrm{mode}},2),
 $$
 
 followed by even rounding. Then
@@ -263,29 +263,29 @@ If weights are absent, $h_q^\ast=h_q$.
 $$
 \gamma=
 \begin{cases}
-\pi\sqrt{(2a)^2(\beta/\pi)^2-0.8}, & \text{optimized},\\[4pt]
+\pi\sqrt{(2a)^2(\beta/\pi)^2-0.8}, & \text{optimized},\\
 \beta, & \text{baseline}.
 \end{cases}
 $$
 
 ##### `kaiser_bessel_kernel`
 
-For $\zeta=\texttt{grid\_distance}$,
+For $\zeta=\mathrm{grid\_distance}$,
 
 $$
 \varphi(\zeta)=
 \begin{cases}
-\dfrac{1}{I_0(\beta)}I_0\left[\gamma\sqrt{1-(\zeta/a)^2}\right], & |\zeta|\le a,\\[6pt]
+\dfrac{1}{I_0(\beta)}I_0[\gamma\sqrt{1-(\zeta/a)^2}], & |\zeta|\le a,\\
 0, & |\zeta|>a.
 \end{cases}
 $$
 
 ##### `kb_fourier_transform`
 
-For $\kappa=\texttt{wavenumber}$ and $d_\kappa=\texttt{grid\_spacing}$,
+For $\kappa=\mathrm{wavenumber}$ and $d_\kappa=\mathrm{grid\_spacing}$,
 
 $$
-\Phi(\kappa)=\frac{2a}{I_0(\beta)}\frac{\sinh\left(\sqrt{\gamma^2-(a\kappa d_\kappa)^2}\right)}{\sqrt{\gamma^2-(a\kappa d_\kappa)^2}},
+\Phi(\kappa)=\frac{2a}{I_0(\beta)}\frac{\sinh(\sqrt{\gamma^2-(a\kappa d_\kappa)^2})}{\sqrt{\gamma^2-(a\kappa d_\kappa)^2}},
 $$
 
 with the usual $\sin(s)/s$ continuation when $\gamma^2-(a\kappa d_\kappa)^2<0$.
@@ -295,7 +295,7 @@ with the usual $\sin(s)/s$ continuation when $\gamma^2-(a\kappa d_\kappa)^2<0$.
 The displacement $\delta$ is mapped to its shortest periodic representative in
 
 $$
-\left[-\frac{L}{2},\frac{L}{2}\right].
+[-\frac{L}{2},\frac{L}{2}].
 $$
 
 This is applied separately with $L=L_x$ and $L=L_y$.
@@ -306,8 +306,8 @@ Each irregular sample contributes
 
 $$
 h_q^\ast\,
-\varphi\left(\frac{x_q-x_i^{\mathrm{aux}}}{d_x^{\mathrm{aux}}}\right)
-\varphi\left(\frac{y_q-y_j^{\mathrm{aux}}}{d_y^{\mathrm{aux}}}\right)
+\varphi(\frac{x_q-x_i^{\mathrm{aux}}}{d_x^{\mathrm{aux}}})
+\varphi(\frac{y_q-y_j^{\mathrm{aux}}}{d_y^{\mathrm{aux}}})
 $$
 
 to every stencil node $(i,j)$ in the support square $[-a,a]^2$. After accumulation,
@@ -329,7 +329,7 @@ $$
 and
 
 $$
-\hat h_{m,n}^{\mathrm{deconv}}=\texttt{fourier\_grid}[j_{\mathrm{wrap}},i_{\mathrm{wrap}}].
+\hat h_{m,n}^{\mathrm{deconv}}=\mathrm{fourier\_grid}[j_{\mathrm{wrap}},i_{\mathrm{wrap}}].
 $$
 
 ##### `compute_nufft_coefficients`
@@ -345,7 +345,7 @@ $$
 with
 
 $$
-\hat h^{\mathrm{fft}}_{m,n}=\frac{1}{N_x^{\mathrm{aux}}N_y^{\mathrm{aux}}}\mathrm{FFT2}\left(h^{\mathrm{aux}}_{i,j}\right),
+\hat h^{\mathrm{fft}}_{m,n}=\frac{1}{N_x^{\mathrm{aux}}N_y^{\mathrm{aux}}}\mathrm{FFT2}(h^{\mathrm{aux}}_{i,j}),
 $$
 
 and
@@ -382,7 +382,7 @@ $$
 and
 
 $$
-\hat h_{m,n}^{\mathrm{dft}}=\frac{1}{Q}\sum_{q=1}^{Q}h_q^\ast e^{-i\left(k_m x_q+\ell_n y_q\right)}.
+\hat h_{m,n}^{\mathrm{dft}}=\frac{1}{Q}\sum_{q=1}^{Q}h_q^\ast e^{-i(k_m x_q+\ell_n y_q)}.
 $$
 
 #### `Module_Csa.py`
@@ -410,7 +410,7 @@ Shared CSA pipeline for sparse Fourier ranking and sparse refitting.
 The dense CSA candidate set is
 
 $$
-\mathcal M=\left\{(m,n):m\in\texttt{m\_values},\ n\in\texttt{n\_values}\right\}.
+\mathcal M=\{(m,n):m\in\mathrm{m\_values},\ n\in\mathrm{n\_values}\}.
 $$
 
 The returned array stores each candidate as `(m_mode, n_mode)`.
@@ -446,7 +446,7 @@ This changes the memory footprint of the basis construction, not the CSA approxi
 The regularized coefficient vector is
 
 $$
-c=\left(A+\lambda I\right)^{-1}b.
+c=(A+\lambda I)^{-1}b.
 $$
 
 If the direct solve is singular, the same system is solved by least squares.
@@ -472,10 +472,10 @@ CSA first fits all dense candidates on the FA support,
 $$
 c_j^{\mathrm{FA}}=
 \arg\min_c
-\left\lVert
+\lVert
 \sum_j c_j e^{i(k_{m_j}x_q^{\mathrm{FA}}+\ell_{n_j}y_q^{\mathrm{FA}})}
 -h_q^{\mathrm{FA}}
-\right\rVert_2^2
+\rVert_2^2
 +\lambda_{\mathrm{FA}}\lVert c\rVert_2^2,
 $$
 
@@ -490,17 +490,17 @@ The largest $S_{\mathrm{CSA}}$ candidates form $\mathcal M_S$. The SA step then 
 $$
 c_j^{\mathrm{SA}}=
 \arg\min_c
-\left\lVert
+\lVert
 \sum_{j\in\mathcal M_S} c_j e^{i(k_{m_j}x_q^{\mathrm{SA}}+\ell_{n_j}y_q^{\mathrm{SA}})}
 -h_q^{\mathrm{SA}}
-\right\rVert_2^2
+\rVert_2^2
 +\lambda_{\mathrm{SA}}\lVert c\rVert_2^2,
 $$
 
 and stores the resulting coefficients as $\hat h_{m,n}^{\mathrm{csa}}$. If `sparse_modes=None`, the shared module sets
 
 $$
-S_{\mathrm{CSA}}=2\max\left(\max_m\lvert m\rvert,\max_n\lvert n\rvert\right).
+S_{\mathrm{CSA}}=2\max(\max_m\lvert m\rvert,\max_n\lvert n\rvert).
 $$
 
 ##### `reconstruct_at_points`
@@ -525,7 +525,7 @@ Each signed pair is mapped to the canonical representative of its conjugate pair
 
 ##### `count_signed_nonzero_modes`
 
-The function counts all signed non-DC coefficients satisfying $\lvert\hat h_{m,n}\rvert>\texttt{tolerance}$.
+The function counts all signed non-DC coefficients satisfying $\lvert\hat h_{m,n}\rvert>\mathrm{tolerance}$.
 
 #### `Module_Orography.py`
 
@@ -550,7 +550,7 @@ Shared DEM samplers and analytical terrain fields.
 ##### `coast_x_global`
 
 $$
-x_{\mathrm{coast}}(y)=0.55L_x+0.05L_x\sin\left(\frac{2\pi y}{L_y}\right).
+x_{\mathrm{coast}}(y)=0.55L_x+0.05L_x\sin(\frac{2\pi y}{L_y}).
 $$
 
 ##### `mono_ridge_density`
@@ -567,11 +567,11 @@ $$
 with
 
 $$
-x_{r1}(y)=0.30L_x+0.14L_x\sin\left(\frac{2\pi y}{L_y}+0.7\right),
+x_{r1}(y)=0.30L_x+0.14L_x\sin(\frac{2\pi y}{L_y}+0.7),
 $$
 
 $$
-x_{r2}(y)=0.72L_x+0.10L_x\cos\left(\frac{2\pi y}{L_y}-0.4\right),
+x_{r2}(y)=0.72L_x+0.10L_x\cos(\frac{2\pi y}{L_y}-0.4),
 $$
 
 and
@@ -579,16 +579,16 @@ and
 $$
 \omega(x,y)=
 0.55
-+0.25\sin\left(\frac{2\pi x}{L_x}+0.3\right)
-+0.20\cos\left(\frac{4\pi y}{L_y}-0.6\right)
-+0.15\sin\left[2\pi\left(\frac{x}{L_x}+\frac{y}{L_y}\right)\right].
++0.25\sin(\frac{2\pi x}{L_x}+0.3)
++0.20\cos(\frac{4\pi y}{L_y}-0.6)
++0.15\sin[2\pi(\frac{x}{L_x}+\frac{y}{L_y})].
 $$
 
 For the Mono square case, $L_x=L_y=L$, so this reduces to the density used by `Code_Mono.py`.
 
 ##### `generate_dem_points`
 
-The function generates exactly $Q=\texttt{sample\_count}$ DEM sample points inside the rectangle
+The function generates exactly $Q=\mathrm{sample\_count}$ DEM sample points inside the rectangle
 
 $$
 0\le x\le L_x,\qquad 0\le y\le L_y,
@@ -614,7 +614,7 @@ $$
 For all other distributions, the function uses accept-reject sampling. It first proposes trial points uniformly,
 
 $$
-(x_j^\ast,y_j^\ast)\sim U\left([0,L_x]\times[0,L_y]\right).
+(x_j^\ast,y_j^\ast)\sim U([0,L_x]\times[0,L_y]).
 $$
 
 Each trial point is assigned a raw sampling density $\rho_j^\ast=\rho(x_j^\ast,y_j^\ast)$. Within the current batch $\mathcal B$, this density is converted into an acceptance probability,
@@ -660,7 +660,7 @@ $$
 \rho_{\mathrm{base},j}=
 \begin{cases}
 1, & x_j^\ast\ge x_{\mathrm{coast}}(y_j^\ast),\\
-\rho_{\mathrm{sea}}, & x_j^\ast<x_{\mathrm{coast}}(y_j^\ast).
+\rho_{\mathrm{sea}}, & x_j^\ast\lt x_{\mathrm{coast}}(y_j^\ast).
 \end{cases}
 $$
 
@@ -668,7 +668,7 @@ The scaled horizontal distance from the coastline is
 
 $$
 d_j=
-\frac{\left|x_j^\ast-x_{\mathrm{coast}}(y_j^\ast)\right|}
+\frac{|x_j^\ast-x_{\mathrm{coast}}(y_j^\ast)|}
 {0.08L_x}.
 $$
 
@@ -677,7 +677,7 @@ The final raw density is
 $$
 \rho_j^\ast=
 \rho_{\mathrm{base},j}
-\left(1+B_{\mathrm{coast}}e^{-d_j^2}\right).
+(1+B_{\mathrm{coast}}e^{-d_j^2}).
 $$
 
 So land points are favored through $\rho_{\mathrm{base},j}$, and points close to the coastline are favored through the exponential factor. The loop continues until exactly $Q$ final DEM points have been generated. If the trial limit is reached first, the function raises an error.
@@ -692,14 +692,14 @@ h_0^{\mathrm{multi}}(x,y)
 &=980e^{-[(x-4.9)^2/3.8+(y-5.2)^2/1.3]}\\
 &\quad+430e^{-[(x-2.4)^2/0.9+(y-7.2)^2/1.8]}\\
 &\quad+310e^{-[(x-7.7)^2/1.2+(y-2.7)^2/0.8]}\\
-&\quad+170\sin\left(2.8x+0.7\sin(1.2y)\right)\cos(1.4y).
+&\quad+170\sin(2.8x+0.7\sin(1.2y))\cos(1.4y).
 \end{aligned}
 $$
 
 For `ridge`, the ridge envelope is
 
 $$
-R(x,y)=e^{-\left[y-\left(4.9+0.9\sin(0.75x)\right)\right]^2/0.55},
+R(x,y)=e^{-[y-(4.9+0.9\sin(0.75x))]^2/0.55},
 $$
 
 and
@@ -722,20 +722,20 @@ h_0^{\mathrm{basin}}(x,y)
 &=620e^{-[(x-2.8)^2/1.0+(y-3.1)^2/1.7]}\\
 &\quad+520e^{-[(x-7.2)^2/1.3+(y-7.4)^2/1.0]}\\
 &\quad-370e^{-[(x-5.1)^2/4.8+(y-5.1)^2/2.6]}\\
-&\quad+145\sin(3.4x)\sin\left(2.1y+0.6\cos x\right).
+&\quad+145\sin(3.4x)\sin(2.1y+0.6\cos x).
 \end{aligned}
 $$
 
 After the base field is formed, the same deterministic roughness is added.
 
 $$
-r(x,y)=45\sin\left(7.2x+1.8\cos y\right)+35\cos\left(6.5y-0.7\sin(1.5x)\right),
+r(x,y)=45\sin(7.2x+1.8\cos y)+35\cos(6.5y-0.7\sin(1.5x)),
 $$
 
 and the sampled heights are shifted so the minimum sampled value is zero.
 
 $$
-h_q=h_0(x_q,y_q)+r(x_q,y_q)-\min_s\left[h_0(x_s,y_s)+r(x_s,y_s)\right].
+h_q=h_0(x_q,y_q)+r(x_q,y_q)-\min_s[h_0(x_s,y_s)+r(x_s,y_s)].
 $$
 
 #### `Module_Csv.py`
@@ -774,7 +774,7 @@ For a list of dictionaries $\mathcal R$, the function preserves the first-seen k
 The table stores one row per sample point.
 
 $$
-\left(q,x_q,y_q,h_q^{\mathrm{multi}},h_q^{\mathrm{ridge}},h_q^{\mathrm{basin}}\right).
+(q,x_q,y_q,h_q^{\mathrm{multi}},h_q^{\mathrm{ridge}},h_q^{\mathrm{basin}}).
 $$
 
 ##### `write_modes_csv`
@@ -804,10 +804,10 @@ Real part, imaginary part, and absolute value are all written explicitly.
 The summary table stores
 
 $$
-\mathrm{median}\left(|e_{m,n}^{\mathrm{opt}}|\right),\quad
-\mathrm{mean}\left(|e_{m,n}^{\mathrm{opt}}|\right),\quad
-\mathrm{median}\left(|e_{m,n}^{\mathrm{base}}|\right),\quad
-\mathrm{mean}\left(|e_{m,n}^{\mathrm{base}}|\right),
+\mathrm{median}(|e_{m,n}^{\mathrm{opt}}|),\quad
+\mathrm{mean}(|e_{m,n}^{\mathrm{opt}}|),\quad
+\mathrm{median}(|e_{m,n}^{\mathrm{base}}|),\quad
+\mathrm{mean}(|e_{m,n}^{\mathrm{base}}|),
 $$
 
 pooled over all retained modes and all terrain cases.
@@ -827,7 +827,7 @@ The columns have the following meanings.
 So each row stores
 
 $$
-\left(\iota,\text{title},\text{label},j,E_{(j)}\right),
+(\iota,\text{title},\text{label},j,E_{(j)}),
 $$
 
 with $\iota$ selecting the theory spectrum and $j$ selecting the row within that sorted spectrum.
@@ -846,7 +846,7 @@ $$
 plus two simple yes/no markers.
 
 $$
-\texttt{in\_window}=
+\mathrm{in\_window}=
 \begin{cases}
 1, & \text{this row lies in the comparison window } j=1,\ldots,J_{\mathrm{window}},\\
 0, & \text{this row lies outside that window},
@@ -854,7 +854,7 @@ $$
 $$
 
 $$
-\texttt{retained\_mode}=
+\mathrm{retained\_mode}=
 \begin{cases}
 1, & \text{this mode is kept by EMS because } j\le K^{\star},\\
 0, & \text{this mode is discarded because } j>K^{\star}.
@@ -907,15 +907,15 @@ Shared, case-agnostic elastic-mode-selection logic.
 Given any nonnegative spectrum $\{E_j\}_{j=1}^{J^{\star}}$, the function first sorts it in descending order as $E_{(j)}$ and computes
 
 $$
-N_{\mathrm{eff}}=\frac{\left(\sum_{j=1}^{J^{\star}}E_{(j)}\right)^2}{\sum_{j=1}^{J^{\star}}E_{(j)}^2},
+N_{\mathrm{eff}}=\frac{(\sum_{j=1}^{J^{\star}}E_{(j)})^2}{\sum_{j=1}^{J^{\star}}E_{(j)}^2},
 \qquad
-N_{\mathrm{eff}}^{\mathrm{clip}}=\min\left(N_{\mathrm{eff}},K_{\max}\right).
+N_{\mathrm{eff}}^{\mathrm{clip}}=\min(N_{\mathrm{eff}},K_{\max}).
 $$
 
 It then restricts the local gap analysis to
 
 $$
-J_{\mathrm{window}}=\min\left(J^{\star},K_{\max}\right)
+J_{\mathrm{window}}=\min(J^{\star},K_{\max})
 $$
 
 and forms
@@ -931,7 +931,7 @@ together with
 $$
 S_{\delta}=
 \begin{cases}
-\dfrac{1}{J_{\mathrm{window}}-1}\sum_{j=1}^{J_{\mathrm{window}}-1}\exp\left[-\dfrac{G_j-1}{\delta}\right], & J_{\mathrm{window}}>1,\\[8pt]
+\dfrac{1}{J_{\mathrm{window}}-1}\sum_{j=1}^{J_{\mathrm{window}}-1}\exp[-\dfrac{G_j-1}{\delta}], & J_{\mathrm{window}}>1,\\
 1, & J_{\mathrm{window}}=1.
 \end{cases}
 $$
@@ -945,7 +945,7 @@ $$
 which sets the target cumulative power fraction
 
 $$
-\alpha_C=\alpha_{\min}+\left(\alpha_{\max}-\alpha_{\min}\right)\mathcal C.
+\alpha_C=\alpha_{\min}+(\alpha_{\max}-\alpha_{\min})\mathcal C.
 $$
 
 Next, the cumulative fraction is
@@ -959,7 +959,7 @@ $$
 The retained count is chosen from the admissible set
 
 $$
-\mathcal K=\left\{K\in\{K_{\min},\ldots,K_{\max}\}:\vartheta(K)\ge \alpha_C\right\}.
+\mathcal K=\{K\in\{K_{\min},\ldots,K_{\max}\}:\vartheta(K)\ge \alpha_C\}.
 $$
 
 If $\mathcal K$ is nonempty, then
@@ -977,7 +977,7 @@ $$
 Finally, the realized cumulative fraction is
 
 $$
-\alpha_C^{\mathrm{final}}=\vartheta\left(K^{\star}\right).
+\alpha_C^{\mathrm{final}}=\vartheta(K^{\star}).
 $$
 
 ##### `select_sparse_conjugate_modes`
@@ -1020,12 +1020,12 @@ The function fixes the global plotting parameters and returns
 
 $$
 \mathcal S=
-\left\{
+\{
 \text{baseline color},
 \text{optimized color},
 \text{median colors},
 \text{terrain colormap}
-\right\}.
+\}.
 $$
 
 The backend is set to `Agg`, and the grid, spine, tick, font, save, and hatch parameters are centralized here so all plotting scripts render from the same style state.
@@ -1035,7 +1035,7 @@ The backend is set to `Agg`, and the grid, spine, tick, font, save, and hatch pa
 For a stem $f_{\mathrm{stem}}$,
 
 $$
-p_{\mathrm{out}}=\texttt{./figures/}f_{\mathrm{stem}}\texttt{.png}.
+p_{\mathrm{out}}=\mathrm{./figures/}f_{\mathrm{stem}}\mathrm{.png}.
 $$
 
 ##### `save_png_and_pdf`
@@ -1043,7 +1043,7 @@ $$
 Given $\mathcal F$ and $p_{\mathrm{out}}$, the function writes
 
 $$
-\mathcal F \rightarrow \left\{p_{\mathrm{out}},\,p_{\mathrm{out}}|_{\texttt{.png}\rightarrow \texttt{.pdf}}\right\}.
+\mathcal F \rightarrow \{p_{\mathrm{out}},\,p_{\mathrm{out}}|_{\mathrm{.png}\rightarrow \mathrm{.pdf}}\}.
 $$
 
 #### `Module_Alps.py`
@@ -1080,7 +1080,7 @@ The function returns $A_{\mathrm{DEM}}$ when the processed archive exists. If it
 
 $$
 A_{\mathrm{DEM}}=
-\texttt{./srtm\_alps/alps\_dem\_processed.npz}.
+\mathrm{./srtm\_alps/alps\_dem\_processed.npz}.
 $$
 
 This makes every compute and plot path fail with the same recovery instruction.
@@ -1116,19 +1116,19 @@ $$
 The function maps accepted spellings to the canonical mesh labels
 
 $$
-\texttt{regular},\qquad \texttt{r2b4},\qquad \texttt{r2b5}.
+\mathrm{regular},\qquad \mathrm{r2b4},\qquad \mathrm{r2b5}.
 $$
 
 It removes underscores and hyphens before matching. The accepted aliases are
 
 $$
-\{\texttt{regular},\texttt{proxy},\texttt{regularproxy}\}\mapsto\texttt{regular},
+\{\mathrm{regular},\mathrm{proxy},\mathrm{regularproxy}\}\mapsto\mathrm{regular},
 $$
 
 $$
-\{\texttt{r02b04},\texttt{r2b4}\}\mapsto\texttt{r2b4},
+\{\mathrm{r02b04},\mathrm{r2b4}\}\mapsto\mathrm{r2b4},
 \qquad
-\{\texttt{r02b05},\texttt{r2b5}\}\mapsto\texttt{r2b5}.
+\{\mathrm{r02b05},\mathrm{r2b5}\}\mapsto\mathrm{r2b5}.
 $$
 
 Unknown labels raise an error before any mesh-dependent file is written.
@@ -1141,9 +1141,9 @@ $$
 M_q=
 \neg\mathrm{finite}(h_q)
 \ \lor\ 
-\left(h_q=h_{\mathrm{nodata}}\right)
+(h_q=h_{\mathrm{nodata}})
 \ \lor\
-\left(h_q\le -32768\right),
+(h_q\le -32768),
 $$
 
 where the explicit nodata test is used only when a finite nodata value is supplied. The returned field is
@@ -1197,7 +1197,7 @@ All branches return the same mathematical object, a north-up DEM array $H_{ij}$ 
 For integer tile coordinates $(\phi_0,\lambda_0)$, the tile stem is
 
 $$
-\texttt{N}\phi_0\texttt{E}\lambda_0,
+\mathrm{N}\phi_0\mathrm{E}\lambda_0,
 $$
 
 with zero padding. The function searches local suffixes `.hgt`, `.tif`, and `.tiff` and returns the first path that exists. The default returned path is the HGT path, which makes missing-tile accounting deterministic.
@@ -1303,7 +1303,7 @@ If $y$ is already ascending, the arrays are returned unchanged.
 The function opens $A_{\mathrm{DEM}}$, orients $y$ upward, replaces remaining non-finite heights by the median finite height, and flattens the grid as
 
 $$
-(x_q,y_q,h_q)=\left(X_{ji},Y_{ji},H_{ji}\right),
+(x_q,y_q,h_q)=(X_{ji},Y_{ji},H_{ji}),
 \qquad q=jN_x+i.
 $$
 
@@ -1338,9 +1338,9 @@ The code `F` means lower-left to upper-right. The code `B` means lower-right to 
 The mesh vertices are a regular grid with
 
 $$
-N_x^{v}=\left\lceil\frac{x_{\max}-x_{\min}}{\Delta_{\mathrm{cell}}}\right\rceil+1,
+N_x^{v}=\lceil\frac{x_{\max}-x_{\min}}{\Delta_{\mathrm{cell}}}\rceil+1,
 \qquad
-N_y^{v}=\left\lceil\frac{y_{\max}-y_{\min}}{\Delta_{\mathrm{cell}}}\right\rceil+1.
+N_y^{v}=\lceil\frac{y_{\max}-y_{\min}}{\Delta_{\mathrm{cell}}}\rceil+1.
 $$
 
 Each cell is split by a stored deterministic diagonal code. For code `F`, the cell uses the lower-left to upper-right diagonal,
@@ -1574,7 +1574,7 @@ For triangle and circle supports, the regular grid is clipped to the active supp
 The dominant wave direction is
 
 $$
-\theta_{m,n}=\tan^{-1}\left(\frac{\ell_n}{k_m}\right),
+\theta_{m,n}=\tan^{-1}(\frac{\ell_n}{k_m}),
 \qquad
 k_m=\frac{2\pi m}{L_x},\quad \ell_n=\frac{2\pi n}{L_y}.
 $$
@@ -1616,7 +1616,7 @@ It computes the raw ENUFFT block $\hat h_{m,n}^{\mathrm{raw}}$, selects the EMS 
 $$
 \mathrm{RMSE}=
 \sqrt{\frac1{Q_T}\sum_{q\in T_r}
-\left(h_q^{\mathrm{rec}}-h_q'\right)^2},
+(h_q^{\mathrm{rec}}-h_q')^2},
 \qquad
 \mathrm{relRMSE}=\frac{\mathrm{RMSE}}{\mathrm{std}_{q\in T_r}(h_q')}.
 $$
@@ -1636,9 +1636,9 @@ $$
 The variance-ratio medians use only triangles whose true reference standard deviation is greater than `1 m`:
 
 $$
-\mathrm{median}\left(
+\mathrm{median}(
 \frac{V_{\mathrm{spec},r}}{V_{\mathrm{true},r}}
-\right).
+).
 $$
 
 ##### `scalar_alps_result_row`
@@ -1647,7 +1647,7 @@ The in-memory row contains arrays and geometry lists. This function removes dens
 
 $$
 (x_c,y_c)\rightarrow
-\{\texttt{centroid\_x}=x_c,\texttt{centroid\_y}=y_c\}.
+\{\mathrm{centroid\_x}=x_c,\mathrm{centroid\_y}=y_c\}.
 $$
 
 ##### `tag_number`
@@ -1655,8 +1655,8 @@ $$
 The function converts numeric tag values by
 
 $$
-1.25\mapsto\texttt{1p25},\qquad
--0.5\mapsto\texttt{m0p5}.
+1.25\mapsto\mathrm{1p25},\qquad
+-0.5\mapsto\mathrm{m0p5}.
 $$
 
 This keeps file tags shell-safe while preserving the parameter value.
@@ -1667,14 +1667,14 @@ For one case dictionary, the tag is
 
 $$
 \tau=
-\left[\texttt{\_}\mathrm{mesh}\right]
-\texttt{\_N}N_{\max}^{\mathrm{mode}}
-\texttt{\_}\mathcal W
-\texttt{\_}w
-\texttt{\_eta}\eta
-\texttt{\_os}\sigma
-\texttt{\_csa}S_{\mathrm{CSA}}
-\texttt{\_dx}\Delta_{\mathrm{cell}}.
+[\mathrm{\_}\mathrm{mesh}]
+\mathrm{\_N}N_{\max}^{\mathrm{mode}}
+\mathrm{\_}\mathcal W
+\mathrm{\_}w
+\mathrm{\_eta}\eta
+\mathrm{\_os}\sigma
+\mathrm{\_csa}S_{\mathrm{CSA}}
+\mathrm{\_dx}\Delta_{\mathrm{cell}}.
 $$
 
 All numeric pieces pass through `tag_number`.
@@ -1685,9 +1685,9 @@ For one mesh-level sweep summary, the aggregate tag is
 
 $$
 \tau_{\mathrm{sweep}}=
-\left[\texttt{\_}\mathrm{mesh}\right]
-\texttt{\_N}N_{\max}^{\mathrm{mode}}
-\texttt{\_dx}\Delta_{\mathrm{cell}}.
+[\mathrm{\_}\mathrm{mesh}]
+\mathrm{\_N}N_{\max}^{\mathrm{mode}}
+\mathrm{\_dx}\Delta_{\mathrm{cell}}.
 $$
 
 The mesh prefix is included for `r2b4` and `r2b5`, giving the fixed outputs `_r2b4_N16_dx160` and `_r2b5_N32_dx80`.

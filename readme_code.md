@@ -80,7 +80,7 @@ The aggregate diagnostics stored in a summary row are printed by the helper
 
 $$
 s_c=\mathrm{summarise\_alps\_results}
-\left(\{R_{c,r}\}_{r\in\mathcal R_c},C_c\right).
+(\{R_{c,r}:r\in\mathcal R_c\},C_c).
 $$
 
 The processed triangle count, median relative RMSE for ENUFFT and CSA over target triangles with reference standard deviation greater than `1 m`, median Parseval ratios over the same non-flat reference set, median ENUFFT $K^\star$, median retained CSA pair count, and median number of window points outside the target triangle are reported.
@@ -110,7 +110,7 @@ The product is built from the ordered list of configuration summaries. No file i
 A process-specific temporary pickle is written by the helper, after which the target path is atomically replaced.
 
 $$
-\texttt{tmp}=\texttt{output.suffix}+\texttt{".tmp."}+\mathrm{pid}.
+\mathrm{tmp}=\mathrm{output.suffix}+\mathrm{".tmp."}+\mathrm{pid}.
 $$
 
 The reducer is thereby prevented from reading a half-written mesh payload or rank chunk.
@@ -166,7 +166,7 @@ records before existing-summary skips.
 For one configuration tag $\tau$, this returns the final local-driver-compatible path
 
 $$
-\texttt{Banerjee\_2026\_Enufft\_Alps\_Summary}\tau\texttt{.csv}.
+\mathrm{Banerjee\_2026\_Enufft\_Alps\_Summary}\tau\mathrm{.csv}.
 $$
 
 It is used both to skip completed configurations and to reload skipped summaries during reduction.
@@ -180,7 +180,7 @@ The worker payload keeps only the arrays needed by `process_alps_triangle`, name
 For mesh $g$, the prepare stage builds the proxy mesh, deplanes the DEM once, selects all triangle ids or the optional first-$N$ subset, and writes
 
 $$
-P_g=P_{\mathrm{dist}}\texttt{\_Mesh\_}g\texttt{.pkl}.
+P_g=P_{\mathrm{dist}}\mathrm{\_Mesh\_}g\mathrm{.pkl}.
 $$
 
 The manifest records mesh kind, mesh version, nominal spacing, mode count, vertex and triangle counts, nonempty-triangle count, triangle ids, cache path, and sweep-summary tag.
@@ -219,7 +219,7 @@ $$
 For each task it initializes the Alps worker globals for the corresponding case and evaluates
 
 $$
-R_{c_j,r_j}=\mathrm{process\_alps\_triangle}(r_j).
+R_{(c_j,r_j)}=\mathrm{process\_alps\_triangle}(r_j).
 $$
 
 The rank writes one atomic `_Rank_######.pkl` chunk file containing all of its rows. No CSV summaries are accumulated in worker completion order.
@@ -229,7 +229,7 @@ The rank writes one atomic `_Rank_######.pkl` chunk file containing all of its r
 The reducer reads all rank chunks, groups rows by configuration, checks that every expected triangle id is present, and sorts by `tri_num`. For each complete configuration it computes
 
 $$
-s_c=\mathrm{summarise\_alps\_results}\left(\{R_{c,r}:R_{c,r}\ \mathrm{not\ skipped}\}, C_c\right),
+s_c=\mathrm{summarise\_alps\_results}(\{R_{c,r}:R_{c,r}\ \mathrm{not\ skipped}\}, C_c),
 $$
 
 then calls the same `write_alps_outputs` function used by `Code_Alps.py`. The final CSV products therefore retain the same schema and row ordering as the local driver for the same case.
@@ -338,9 +338,9 @@ $$
 The pooled arrays are
 
 $$
-\left\{|e_{m,n}^{\mathrm{opt},(j)}|\right\}_{j,m,n},
+\{|e_{m,n}^{\mathrm{opt},(j)}|\}_{j,m,n},
 \qquad
-\left\{|e_{m,n}^{\mathrm{base},(j)}|\right\}_{j,m,n}.
+\{|e_{m,n}^{\mathrm{base},(j)}|\}_{j,m,n}.
 $$
 
 ##### `main`
@@ -358,10 +358,10 @@ $$
 The terminal summary is
 
 $$
-\mathrm{median}\left(|e_{m,n}^{\mathrm{opt}}|\right),\quad
-\mathrm{median}\left(|e_{m,n}^{\mathrm{base}}|\right),\quad
-\mathrm{mean}\left(|e_{m,n}^{\mathrm{opt}}|\right),\quad
-\mathrm{mean}\left(|e_{m,n}^{\mathrm{base}}|\right).
+\mathrm{median}(|e_{m,n}^{\mathrm{opt}}|),\quad
+\mathrm{median}(|e_{m,n}^{\mathrm{base}}|),\quad
+\mathrm{mean}(|e_{m,n}^{\mathrm{opt}}|),\quad
+\mathrm{mean}(|e_{m,n}^{\mathrm{base}}|).
 $$
 
 #### `Code_Ems.py`
@@ -418,7 +418,7 @@ $$
 and
 
 $$
-E_{\mathrm{cos}}(j)=0.9\cos\left(\frac{\pi (j-1)}{2J^{\star}}\right).
+E_{\mathrm{cos}}(j)=0.9\cos(\frac{\pi (j-1)}{2J^{\star}}).
 $$
 
 ##### `run_case`
@@ -426,7 +426,7 @@ $$
 The function evaluates the shared EMS algorithm from `Module_Ems.py` on each local theory spectrum, so each case produces
 
 $$
-\left\{E_{(j)},\vartheta(j),G_j,N_{\mathrm{eff}},S_{\delta},\mathcal C,\alpha_C,K^{\star},\alpha_C^{\mathrm{final}}\right\}.
+\{E_{(j)},\vartheta(j),G_j,N_{\mathrm{eff}},S_{\delta},\mathcal C,\alpha_C,K^{\star},\alpha_C^{\mathrm{final}}\}.
 $$
 
 ##### `main`
@@ -444,7 +444,7 @@ $$
 and the per-spectrum tuple is printed as
 
 $$
-\left(K^{\star},\alpha_C,\alpha_C^{\mathrm{final}},N_{\mathrm{eff}},S_{\delta}\right).
+(K^{\star},\alpha_C,\alpha_C^{\mathrm{final}},N_{\mathrm{eff}},S_{\delta}).
 $$
 
 #### `Code_Mono.py`
@@ -495,7 +495,7 @@ Case-level compute driver for the monochromatic ENUFFT and CSA sweep.
 
 ##### `build_case`
 
-The function creates the default parameter dictionary and applies one sweep update. The default case contains the physical field constants, ENUFFT parameters, EMS parameters, CSA parameters, and the triangle-domain clipping switch $b_{\Omega T}=\texttt{True}$. In the sweep, `build_case` is called once for each
+The function creates the default parameter dictionary and applies one sweep update. The default case contains the physical field constants, ENUFFT parameters, EMS parameters, CSA parameters, and the triangle-domain clipping switch $b_{\Omega T}=\mathrm{True}$. In the sweep, `build_case` is called once for each
 
 $$
 p\in\mathcal P,
@@ -516,7 +516,7 @@ $$
 The equilateral height is $\sqrt{3}\ell_T/2$, the plotted height is
 
 $$
-h_T=\frac{\sqrt{3}\ell_T}{2}\left(0.45+0.55u\right),
+h_T=\frac{\sqrt{3}\ell_T}{2}(0.45+0.55u),
 $$
 
 and the skew offset is
@@ -528,7 +528,7 @@ $$
 The three local vertices are then rotated by $\theta_T$ and shifted to
 
 $$
-\left(\frac{L}{2},\frac{L}{2}+\Delta y\,L\right).
+(\frac{L}{2},\frac{L}{2}+\Delta y\,L).
 $$
 
 ##### `classify_regions`
@@ -536,7 +536,7 @@ $$
 For points $p_q=(x_q,y_q)$, triangle vertices $v_i=(x_i,y_i)$, and triangle centre $c=(x_c,y_c)$, the function returns a possible region label $r_q\in\{0,1,2,3\}$. The label `0` is reserved for points inside the triangle.
 
 $$
-M_T(q)=\texttt{points\_in\_triangle\_mask}(p_q,\{v_0,v_1,v_2\}).
+M_T(q)=\mathrm{points\_in\_triangle\_mask}(p_q,\{v_0,v_1,v_2\}).
 $$
 
 The remaining labels are possible labels for points outside the triangle. They are assigned from the direction of each point relative to the same centre. The three vertex directions are
@@ -627,7 +627,7 @@ The fixed master seed makes the four hidden modes and phases deterministic for a
 For point $q$ in region $r(q)$,
 
 $$
-h_q=A\cos\left(\frac{2\pi m_{r(q)}x_q}{L_x}+\frac{2\pi n_{r(q)}y_q}{L_y}+\phi_{r(q)}\right).
+h_q=A\cos(\frac{2\pi m_{r(q)}x_q}{L_x}+\frac{2\pi n_{r(q)}y_q}{L_y}+\phi_{r(q)}).
 $$
 
 Here $x_q,y_q,L_x,L_y$ use the same horizontal unit, km in the Mono case, so the phase is dimensionless. The amplitude $A$ is a height scale in m, so $h_q$ and the recovered Fourier amplitudes are also in m.
@@ -643,13 +643,13 @@ The ENUFFT support $\mathcal W$ is one of
 $$
 \mathcal W_T=
 \begin{cases}
-\Omega_T\cap\Omega, & b_{\Omega T}=\texttt{True},\\
-\Omega_T, & b_{\Omega T}=\texttt{False},
+\Omega_T\cap\Omega, & b_{\Omega T}=\mathrm{True},\\
+\Omega_T, & b_{\Omega T}=\mathrm{False},
 \end{cases}
 \qquad
 \mathcal W_S=[0,L]\times[0,L],
 \qquad
-\mathcal W_C=\left\{(x,y)\in\Omega:\left\lVert(x,y)-\left(\frac{L}{2},\frac{L}{2}\right)\right\rVert_2\le0.5L\right\}.
+\mathcal W_C=\{(x,y)\in\Omega:\lVert(x,y)-(\frac{L}{2},\frac{L}{2})\rVert_2\le0.5L\}.
 $$
 
 The square-domain mask inside the function is
@@ -662,17 +662,17 @@ M_\Omega(q)=
 \end{cases}
 $$
 
-For the triangle case, `get_analysis_mask` first computes the raw triangle mask $M_T(q)$. When $b_{\Omega T}=\texttt{True}$, the returned point mask is $M_T(q)M_\Omega(q)$ and the returned area is
+For the triangle case, `get_analysis_mask` first computes the raw triangle mask $M_T(q)$. When $b_{\Omega T}=\mathrm{True}$, the returned point mask is $M_T(q)M_\Omega(q)$ and the returned area is
 
 $$
-\lvert\Omega_T^\Omega\rvert=\texttt{polygon\_area\_2d}\left(\texttt{clip\_polygon\_to\_box}(v_0,v_1,v_2,0,L,0,L)\right).
+\lvert\Omega_T^\Omega\rvert=\mathrm{polygon\_area\_2d}(\mathrm{clip\_polygon\_to\_box}(v_0,v_1,v_2,0,L,0,L)).
 $$
 
-When $b_{\Omega T}=\texttt{False}$, the returned point mask is the raw $M_T(q)$ and the returned area is $\lvert\Omega_T\rvert$. This gives a direct legacy comparison mode while keeping the support decision in one function.
+When $b_{\Omega T}=\mathrm{False}$, the returned point mask is the raw $M_T(q)$ and the returned area is $\lvert\Omega_T\rvert$. This gives a direct legacy comparison mode while keeping the support decision in one function.
 
 ##### `compute_voronoi_weights`
 
-A regular `96 x 96` support grid is built over $\Omega$ and then clipped to any additional support restriction in $\mathcal W$. For the triangle case, the grid membership test uses the raw triangle vertices because the grid itself already lies in $\Omega$. The area factor is $\lvert\Omega_T^\Omega\rvert$ when $b_{\Omega T}=\texttt{True}$ and $\lvert\Omega_T\rvert$ when $b_{\Omega T}=\texttt{False}$. Each retained grid cell centre is assigned to its nearest irregular point, so if point $q$ owns $c_q$ grid cells,
+A regular `96 x 96` support grid is built over $\Omega$ and then clipped to any additional support restriction in $\mathcal W$. For the triangle case, the grid membership test uses the raw triangle vertices because the grid itself already lies in $\Omega$. The area factor is $\lvert\Omega_T^\Omega\rvert$ when $b_{\Omega T}=\mathrm{True}$ and $\lvert\Omega_T\rvert$ when $b_{\Omega T}=\mathrm{False}$. Each retained grid cell centre is assigned to its nearest irregular point, so if point $q$ owns $c_q$ grid cells,
 
 $$
 \tilde w_q=c_q\frac{\lvert\mathcal W\rvert}{N_{\mathrm{grid}}},
@@ -706,15 +706,15 @@ with the representative chosen so $m>0$ or $m=0,n\ge0$. The direction error is
 
 $$
 \Delta\theta=
-\min\left(
+\min(
 \lvert\theta_{\mathrm{true}}-\theta_{\mathrm{peak}}\rvert\bmod 180^\circ,\,
-180^\circ-\left[\lvert\theta_{\mathrm{true}}-\theta_{\mathrm{peak}}\rvert\bmod 180^\circ\right]
-\right).
+180^\circ-[\lvert\theta_{\mathrm{true}}-\theta_{\mathrm{peak}}\rvert\bmod 180^\circ]
+).
 $$
 
 ##### `compute_csa_reference`
 
-With $b_{\Omega T}=\texttt{True}$, the CSA FA support is the full square and the SA support is the clipped triangle.
+With $b_{\Omega T}=\mathrm{True}$, the CSA FA support is the full square and the SA support is the clipped triangle.
 
 $$
 \mathcal W_{\mathrm{FA}}=[0,L]\times[0,L],
@@ -722,7 +722,7 @@ $$
 \mathcal W_{\mathrm{SA}}=\Omega_T\cap[0,L]\times[0,L].
 $$
 
-With $b_{\Omega T}=\texttt{False}$, the SA support is $\Omega_T$.
+With $b_{\Omega T}=\mathrm{False}$, the SA support is $\Omega_T$.
 
 For Mono, `Code_Mono.py` calls the shared CSA module with `chunk_size=None`, so the FA and SA normal equations are assembled as whole sample clouds. The shared module can use chunking for larger future cases without changing the normal equations being solved. The returned object stores $\hat h_{m,n}^{\mathrm{csa}}$, selected signed modes, selected conjugate-pair count, signed nonzero count, and CSA peak diagnostics once per physical setup.
 
@@ -742,12 +742,12 @@ For one support, weighting rule, and oversampling factor, the function computes
 
 $$
 \hat h_{m,n}^{\mathrm{nufft}}=
-\mathrm{ENUFFT}\left(\{x_q,y_q,h_q,w_q\}_{q\in\mathcal W}\right),
+\mathrm{ENUFFT}(\{x_q,y_q,h_q,w_q\}_{q\in\mathcal W}),
 $$
 
 then applies EMS to the raw ENUFFT spectrum to get a sparse conjugate-pair block. It computes ENUFFT peak diagnostics against the hidden triangle mode, attaches the CSA diagnostics already computed for the same physical setup, and returns one detail row, one summary row, and sparse mode rows. CSA mode rows are written only once per physical setup because CSA does not depend on the ENUFFT mask, ENUFFT weighting rule, or ENUFFT oversampling factor.
 
-The stored `triangle_area` column follows the active support. It is $\lvert\Omega_T^\Omega\rvert$ when $b_{\Omega T}=\texttt{True}$ and $\lvert\Omega_T\rvert$ when $b_{\Omega T}=\texttt{False}$.
+The stored `triangle_area` column follows the active support. It is $\lvert\Omega_T^\Omega\rvert$ when $b_{\Omega T}=\mathrm{True}$ and $\lvert\Omega_T\rvert$ when $b_{\Omega T}=\mathrm{False}$.
 
 ##### `build_parameter_combinations`
 
@@ -839,7 +839,7 @@ R(x,y)=\sqrt{x^2+y^2},
 \qquad
 E(x,y)=
 \begin{cases}
-1+\cos\left(\dfrac{2\pi R}{r_\lambda\lambda_0}\right), & R\le\dfrac{r_\lambda\lambda_0}{2},\\
+1+\cos(\dfrac{2\pi R}{r_\lambda\lambda_0}), & R\le\dfrac{r_\lambda\lambda_0}{2},\\
 0, & \mathrm{otherwise},
 \end{cases}
 $$
@@ -871,7 +871,7 @@ The function loads the final time $t_f$, grid centers $(x_i,y_j)$, meridional wi
 The function writes the terrain table as one row per fine-grid point.
 
 $$
-\left(i,j,x_i,y_j,h_{j,i}\right).
+(i,j,x_i,y_j,h_{j,i}).
 $$
 
 The stored heights use km because the plotted orography panel is labelled in km.
@@ -881,7 +881,7 @@ The stored heights use km because the plotted orography panel is labelled in km.
 The function writes one final-time surface row per model column.
 
 $$
-\left(i,j,x_i,y_j,v_{j,i},K^\star_{j,i},A_{j,i},100(1-A_{j,i})\right).
+(i,j,x_i,y_j,v_{j,i},K^\star_{j,i},A_{j,i},100(1-A_{j,i})).
 $$
 
 Inactive launch points have no retained-power fraction and are written with a missing loss value.

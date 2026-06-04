@@ -47,46 +47,25 @@ Finite floating-point values with integer value are converted to integers so tri
 
 ##### `read_csv_rows`
 
-For a CSV table with rows $r_i$ and columns $c_j$, the function returns dictionaries
+For a CSV table with rows $r_i$ and columns $c_j$, the function returns dictionaries after applying `parse_scalar` to each entry.
 
 $$
-\{\{c_j:\mathrm{parse\_scalar}(r_{ij})\}_j\}_i.
+\{\{c_j:v_{ij}\}_j\}_i.
 $$
 
 It is the only scalar table reader used by the Alps plot paths.
 
 ##### `tag_from_per_triangle_path`
 
-Given a filename
-
-$$
-\mathrm{Banerjee\_2026\_Enufft\_Alps\_PerTriangle}\tau\mathrm{.csv},
-$$
-
-the function returns the configuration tag $\tau$. This tag is later reused to locate the matching `Summary` and `Spectra` CSV files.
+Given a filename of the form `Banerjee_2026_Enufft_Alps_PerTriangle<tau>.csv`, the function returns the configuration tag $\tau$. This tag is later reused to locate the matching `Summary` and `Spectra` CSV files.
 
 ##### `paths_for_tag`
 
-For a tag $\tau$, the function returns
-
-$$
-(
-D_{\mathrm{csv}}/O_1\tau\mathrm{.csv},
-D_{\mathrm{csv}}/O_2\tau\mathrm{.csv},
-D_{\mathrm{csv}}/O_3\tau\mathrm{.csv}
-),
-$$
-
-where $O_1$, $O_2$, and $O_3$ are the per-triangle, summary, and spectra filename prefixes.
+For a tag $\tau$, the function returns the per-triangle, summary, and spectra CSV paths built from the shared CSV directory and the three filename prefixes.
 
 ##### `is_current_proxy_tag`
 
-A discovered tag is accepted only when it has the current fixed proxy-mesh shape.
-
-$$
-\tau=\mathrm{\_r2b[45]\_}\cdots\mathrm{\_dx}\Delta_{\mathrm{cell}}
-[\mathrm{\_first}N].
-$$
+A discovered tag is accepted only when it has the current fixed proxy-mesh shape `_r2b[45]_..._dx<cell>` with an optional `_first<N>` suffix.
 
 This excludes older actual-grid or pre-port outputs without a mesh prefix and `_dx...` suffix.
 
@@ -127,11 +106,7 @@ with rank $j$ stored at zero-based Python index $j-1$.
 
 ##### `alps_figure_path`
 
-For a figure stem $s$, the output path is
-
-$$
-p_{\mathrm{fig}}=\mathrm{./figures/}s\mathrm{.png}.
-$$
+For a figure stem `s`, the output path is `./figures/<s>.png`.
 
 The figure directory is created before the path is returned.
 
@@ -187,13 +162,7 @@ The count staircase is drawn, and for hatched methods a transparent bar layer wi
 
 ##### `window_support_name`
 
-The function maps window tags to display support names.
-
-$$
-\mathrm{square\_*}\mapsto\mathrm{Square},\quad
-\mathrm{triangle\_*}\mapsto\mathrm{Tri.},\quad
-\mathrm{circle\_*}\mapsto\mathrm{Circle}.
-$$
+The function maps `square_*` tags to `Square`, `triangle_*` tags to `Tri.`, and `circle_*` tags to `Circle`.
 
 This label is used for pooling ENUFFT rows by support family.
 
@@ -203,11 +172,7 @@ The function searches a filename for any known Alps window strategy and returns 
 
 ##### `detect_strategy_from_filename`
 
-The function extracts the full strategy $\mathcal W$ from a tagged filename by matching one of the six known values, for example
-
-$$
-\mathrm{\_triangle\_centroid\_}\mapsto \mathrm{triangle\_centroid}.
-$$
+The function extracts the full strategy $\mathcal W$ from a tagged filename by matching one of the six known values, for example `_triangle_centroid_` maps to `triangle_centroid`.
 
 ##### `csa_pooled_spectra_key_from_filename`
 
@@ -227,13 +192,7 @@ For scalar rows, the same CSA de-duplication key $\kappa_{\mathrm{CSA}}$ is buil
 
 ##### `make_pooled_method_store`
 
-The pooled store is initialized as
-
-$$
-\{\mathrm{CSA},\mathrm{Square},\mathrm{Tri.},\mathrm{Circle},\mathrm{ENUFFT},\mathrm{Physical}\}
-\rightarrow
-\{\mathrm{rel\_rmse},\mathrm{spectra},\mathrm{by\_tri},\mathrm{samples}\}.
-$$
+The pooled store is initialized with the method keys `CSA`, `Square`, `Tri.`, `Circle`, `ENUFFT`, and `Physical`; each method has `rel_rmse`, `spectra`, `by_tri`, and `samples` buckets.
 
 Each method bucket holds scalar distributions, sorted amplitude curves, per-triangle map values, and centroid-tagged samples for physical-cell remapping.
 
@@ -279,14 +238,7 @@ when $z$ can be parsed as a finite float.
 
 ##### `make_terminal_store`
 
-The terminal store is
-
-$$
-\{\mathrm{Physical},\mathrm{CSA},\mathrm{Square},\mathrm{Triangle},
-\mathrm{Circle},\mathrm{ENUFFT\ pooled}\}
-\rightarrow
-\{\mathrm{rel\_rmse},\mathrm{mode\_count},\mathrm{variance}\}.
-$$
+The terminal store uses the method keys `Physical`, `CSA`, `Square`, `Triangle`, `Circle`, and `ENUFFT pooled`; each method has `rel_rmse`, `mode_count`, and `variance` buckets.
 
 Every leaf is initialized as an empty list.
 
@@ -732,7 +684,7 @@ The function creates an axes at the supplied rectangle, displays the pre-rendere
 The high-resolution local projected raster corners are converted by the hero map back to longitude-latitude extent, then drawn as
 
 $$
-\mathrm{RGB}(\lambda,\phi)=\mathrm{map\_colors}(H^{1''}).
+\mathrm{RGB}(\lambda,\phi)=C(H^{1''}).
 $$
 
 It overlays graticule lines, country boundaries, the scale bar, country labels, and the source-resolution title.
@@ -787,13 +739,7 @@ For one summary row and tag, the helper rebuilds a plotting case with the inferr
 
 ##### `mesh_for_case`
 
-The function caches meshes by
-
-$$
-(\mathrm{mesh\_name},\Delta_{\mathrm{cell}})
-$$
-
-so multiple tags from the same mesh group reuse one `build_alps_mesh` result during plotting.
+The function caches meshes by `(mesh_name, cell_size)`, so multiple tags from the same mesh group reuse one `build_alps_mesh` result during plotting.
 
 ##### `main`
 
@@ -914,13 +860,7 @@ $$
 
 ##### `main`
 
-The driver rebuilds the full $2\times 3$ EMS figure from the CSV tables, applies the shared plot template, and exports
-
-$$
-\mathrm{./figures/Banerjee\_2026\_Enufft\_Ems.png}
-\qquad\text{and}\qquad
-\mathrm{./figures/Banerjee\_2026\_Enufft\_Ems.pdf}.
-$$
+The driver rebuilds the full $2\times 3$ EMS figure from the CSV tables, applies the shared plot template, and exports `./figures/Banerjee_2026_Enufft_Ems.png` and `.pdf`.
 
 #### `Plot_Mono.py`
 
@@ -1160,13 +1100,7 @@ with the radial ceiling set to `1.08` so labels can sit outside the unit ring.
 
 ##### `main`
 
-The driver reads `Banerjee_2026_Enufft_Mono_Summary.csv`, applies the shared plotting style, builds a `2 x 3` canvas, and exports
-
-$$
-\mathrm{./figures/Banerjee\_2026\_Enufft\_Mono.png}
-\qquad\text{and}\qquad
-\mathrm{./figures/Banerjee\_2026\_Enufft\_Mono.pdf}.
-$$
+The driver reads `Banerjee_2026_Enufft_Mono_Summary.csv`, applies the shared plotting style, builds a `2 x 3` canvas, and exports `./figures/Banerjee_2026_Enufft_Mono.png` and `.pdf`.
 
 #### `Plot_Mountain.py`
 
@@ -1267,13 +1201,7 @@ The active part of the fine-grid topography is drawn as a 3D surface. The displa
 
 ##### `save_figure`
 
-The helper creates `./figures` and exports both
-
-$$
-\mathrm{./figures/Banerjee\_2026\_Enufft\_Mountain.png}
-\qquad\text{and}\qquad
-\mathrm{./figures/Banerjee\_2026\_Enufft\_Mountain.pdf}.
-$$
+The helper creates `./figures` and exports `./figures/Banerjee_2026_Enufft_Mountain.png` and `.pdf`.
 
 ##### `main`
 

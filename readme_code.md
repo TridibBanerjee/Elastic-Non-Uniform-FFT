@@ -76,11 +76,10 @@ $$
 
 ##### `print_summary`
 
-The aggregate diagnostics stored in a summary row are printed by the helper
+The aggregate diagnostics stored in a summary row are printed from
 
 $$
-s_c=\mathrm{summarise\_alps\_results}
-(\{R_{c,r}:r\in\mathcal R_c\},C_c).
+s_c=f_{\mathrm{summary}}(\{R_{c,r}:r\in\mathcal R_c\},C_c).
 $$
 
 The processed triangle count, median relative RMSE for ENUFFT and CSA over target triangles with reference standard deviation greater than `1 m`, median Parseval ratios over the same non-flat reference set, median ENUFFT $K^\star$, median retained CSA pair count, and median number of window points outside the target triangle are reported.
@@ -163,11 +162,7 @@ records before existing-summary skips.
 
 ##### `summary_path_for_tag`
 
-For one configuration tag $\tau$, this returns the final local-driver-compatible path
-
-$$
-\mathrm{Banerjee\_2026\_Enufft\_Alps\_Summary}\tau\mathrm{.csv}.
-$$
+For one configuration tag $\tau$, this returns the final local-driver-compatible path `Banerjee_2026_Enufft_Alps_Summary<tau>.csv`.
 
 It is used both to skip completed configurations and to reload skipped summaries during reduction.
 
@@ -177,11 +172,7 @@ The worker payload keeps only the arrays needed by `process_alps_triangle`, name
 
 ##### `prepare_mesh_payload`
 
-For mesh $g$, the prepare stage builds the proxy mesh, deplanes the DEM once, selects all triangle ids or the optional first-$N$ subset, and writes
-
-$$
-P_g=P_{\mathrm{dist}}\mathrm{\_Mesh\_}g\mathrm{.pkl}.
-$$
+For mesh $g$, the prepare stage builds the proxy mesh, deplanes the DEM once, selects all triangle ids or the optional first-$N$ subset, and writes the cached mesh payload `<distributed_prefix>_Mesh_<g>.pkl`.
 
 The manifest records mesh kind, mesh version, nominal spacing, mode count, vertex and triangle counts, nonempty-triangle count, triangle ids, cache path, and sweep-summary tag.
 
@@ -219,7 +210,7 @@ $$
 For each task it initializes the Alps worker globals for the corresponding case and evaluates
 
 $$
-R_j=\mathrm{process\_alps\_triangle}(r_j).
+R_j=f_{\mathrm{triangle}}(r_j).
 $$
 
 The rank writes one atomic `_Rank_######.pkl` chunk file containing all of its rows. No CSV summaries are accumulated in worker completion order.
@@ -229,7 +220,7 @@ The rank writes one atomic `_Rank_######.pkl` chunk file containing all of its r
 The reducer reads all rank chunks, groups rows by configuration, checks that every expected triangle id is present, and sorts by `tri_num`. For each complete configuration it computes
 
 $$
-s_c=\mathrm{summarise\_alps\_results}(\{R_{c,r}:R_{c,r}\ \mathrm{not\ skipped}\}, C_c),
+s_c=f_{\mathrm{summary}}(\mathcal R_c^{\mathrm{done}},C_c),
 $$
 
 then calls the same `write_alps_outputs` function used by `Code_Alps.py`. The final CSV products therefore retain the same schema and row ordering as the local driver for the same case.
@@ -536,7 +527,7 @@ $$
 For points $p_q=(x_q,y_q)$, triangle vertices $v_i=(x_i,y_i)$, and triangle centre $c=(x_c,y_c)$, the function returns a possible region label $r_q\in\{0,1,2,3\}$. The label `0` is reserved for points inside the triangle.
 
 $$
-M_T(q)=\mathrm{points\_in\_triangle\_mask}(p_q,\{v_0,v_1,v_2\}).
+M_T(q)=\mathbf 1[p_q\in T].
 $$
 
 The remaining labels are possible labels for points outside the triangle. They are assigned from the direction of each point relative to the same centre. The three vertex directions are
@@ -662,10 +653,10 @@ M_\Omega(q)=
 \end{cases}
 $$
 
-For the triangle case, `get_analysis_mask` first computes the raw triangle mask $M_T(q)$. When $b_{\Omega T}=\mathrm{True}$, the returned point mask is $M_T(q)M_\Omega(q)$ and the returned area is
+For the triangle case, `get_analysis_mask` first computes the raw triangle mask $M_T(q)$. When $b_{\Omega T}=\mathrm{True}$, the returned point mask is $M_T(q)M_\Omega(q)$ and the returned area is the clipped triangle-box area
 
 $$
-\lvert\Omega_T^\Omega\rvert=\mathrm{polygon\_area\_2d}(\mathrm{clip\_polygon\_to\_box}(v_0,v_1,v_2,0,L,0,L)).
+\lvert\Omega_T^\Omega\rvert=\lvert T\cap[0,L]^2\rvert.
 $$
 
 When $b_{\Omega T}=\mathrm{False}$, the returned point mask is the raw $M_T(q)$ and the returned area is $\lvert\Omega_T\rvert$. This gives a direct legacy comparison mode while keeping the support decision in one function.

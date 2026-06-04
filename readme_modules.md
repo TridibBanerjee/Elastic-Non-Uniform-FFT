@@ -129,11 +129,10 @@ and `polygon_area_2d(clipped)` is the area of the polygon restricted to the anal
 
 ##### `polygon_box_intersection_area`
 
-This helper combines the two previous operations:
+This helper combines the two previous operations and returns the clipped polygon area:
 
 $$
-\mathrm{polygon\_box\_intersection\_area}(\Omega_P,B)=
-\lvert\Omega_P\cap B\rvert.
+A(\Omega_P,B)=\lvert\Omega_P\cap B\rvert.
 $$
 
 Both the ported mono triangular mask and the ported Alps triangular window use this helper for their rectangular-domain intersection areas, so the mask geometry and area normalization follow one shared convention.
@@ -270,7 +269,7 @@ $$
 
 ##### `kaiser_bessel_kernel`
 
-For $\zeta=\mathrm{grid\_distance}$,
+For the grid-distance variable $\zeta$,
 
 $$
 \varphi(\zeta)=
@@ -282,7 +281,7 @@ $$
 
 ##### `kb_fourier_transform`
 
-For $\kappa=\mathrm{wavenumber}$ and $d_\kappa=\mathrm{grid\_spacing}$,
+For wavenumber $\kappa$ and grid spacing $d_\kappa$,
 
 $$
 \Phi(\kappa)=\frac{2a}{I_0(\beta)}\frac{\sinh(\sqrt{\gamma^2-(a\kappa d_\kappa)^2})}{\sqrt{\gamma^2-(a\kappa d_\kappa)^2}},
@@ -329,7 +328,7 @@ $$
 and
 
 $$
-\hat h_{m,n}^{\mathrm{deconv}}=\mathrm{fourier\_grid}[j_{\mathrm{wrap}},i_{\mathrm{wrap}}].
+\hat h_{m,n}^{\mathrm{deconv}}=F[j_{\mathrm{wrap}},i_{\mathrm{wrap}}].
 $$
 
 ##### `compute_nufft_coefficients`
@@ -410,7 +409,7 @@ Shared CSA pipeline for sparse Fourier ranking and sparse refitting.
 The dense CSA candidate set is
 
 $$
-\mathcal M=\{(m,n):m\in\mathrm{m\_values},\ n\in\mathrm{n\_values}\}.
+\mathcal M=\{(m,n):m\in M_m,\ n\in M_n\}.
 $$
 
 The returned array stores each candidate as `(m_mode, n_mode)`.
@@ -588,7 +587,7 @@ For the Mono square case, $L_x=L_y=L$, so this reduces to the density used by `C
 
 ##### `generate_dem_points`
 
-The function generates exactly $Q=\mathrm{sample\_count}$ DEM sample points inside the rectangle
+The function generates exactly $Q$ DEM sample points inside the rectangle
 
 $$
 0\le x\le L_x,\qquad 0\le y\le L_y,
@@ -843,23 +842,7 @@ $$
 G_j=\frac{E_{(j)}}{E_{(j+1)}},
 $$
 
-plus two simple yes/no markers.
-
-$$
-\mathrm{in\_window}=
-\begin{cases}
-1, & \text{this row lies in the comparison window } j=1,\ldots,J_{\mathrm{window}},\\
-0, & \text{this row lies outside that window},
-\end{cases}
-$$
-
-$$
-\mathrm{retained\_mode}=
-\begin{cases}
-1, & \text{this mode is kept by EMS because } j\le K^{\star},\\
-0, & \text{this mode is discarded because } j>K^{\star}.
-\end{cases}
-$$
+plus two simple yes/no markers: `in_window` is one for rows in $j=1,\ldots,J_{\mathrm{window}}$, and `retained_mode` is one for modes with $j\le K^\star$.
 
 ##### `write_ems_summary_csv`
 
@@ -1032,19 +1015,11 @@ The backend is set to `Agg`, and the grid, spine, tick, font, save, and hatch pa
 
 ##### `figure_output_path`
 
-For a stem $f_{\mathrm{stem}}$,
-
-$$
-p_{\mathrm{out}}=\mathrm{./figures/}f_{\mathrm{stem}}\mathrm{.png}.
-$$
+For a stem `f_stem`, the output path is `./figures/<f_stem>.png`.
 
 ##### `save_png_and_pdf`
 
-Given $\mathcal F$ and $p_{\mathrm{out}}$, the function writes
-
-$$
-\mathcal F \rightarrow \{p_{\mathrm{out}},\,p_{\mathrm{out}}|_{\mathrm{.png}\rightarrow \mathrm{.pdf}}\}.
-$$
+Given the figure and PNG path, the function writes the PNG and the matching `.pdf` path.
 
 #### `Module_Alps.py`
 
@@ -1076,12 +1051,7 @@ Shared Alps DEM preprocessing, local-window geometry, and per-triangle compariso
 
 ##### `require_preprocessed_dem`
 
-The function returns $A_{\mathrm{DEM}}$ when the processed archive exists. If it does not exist, the function raises a `FileNotFoundError` with the two supported preprocessing commands.
-
-$$
-A_{\mathrm{DEM}}=
-\mathrm{./srtm\_alps/alps\_dem\_processed.npz}.
-$$
+The function returns $A_{\mathrm{DEM}}$ when `./srtm_alps/alps_dem_processed.npz` exists. If it does not exist, the function raises a `FileNotFoundError` with the two supported preprocessing commands.
 
 This makes every compute and plot path fail with the same recovery instruction.
 
@@ -1375,14 +1345,7 @@ used to build the two triangle vertex triples in each structured cell.
 
 ##### `mesh_geometry_signature`
 
-The signature is a SHA-256 digest truncated to 16 hexadecimal characters. The digest is built from the mesh arrays
-
-$$
-\{\mathrm{vertices},\mathrm{triangles},
-\mathrm{cell\_triangle\_ids},
-\mathrm{cell\_diagonal\_codes},
-\mathrm{cell\_tie\_slots}\}.
-$$
+The signature is a SHA-256 digest truncated to 16 hexadecimal characters. The digest is built from `vertices`, `triangles`, `cell_triangle_ids`, `cell_diagonal_codes`, and `cell_tie_slots`.
 
 For each stored array, the key name, dtype, shape, and raw bytes enter the hash. The reducer uses this value to reject rows produced by a different physical mesh or triangle ordering.
 
@@ -1391,9 +1354,7 @@ For each stored array, the key name, dtype, shape, and raw bytes enter the hash.
 The function normalizes the requested mesh label and dispatches to `regular_icon_like_triangles`.
 
 $$
-\mathcal M_g=
-\mathrm{regular\_icon\_like\_triangles}
-(x_i,y_j,\Delta_{\mathrm{cell}},g).
+\mathcal M_g=f_{\mathrm{mesh}}(x_i,y_j,\Delta_{\mathrm{cell}},g).
 $$
 
 If no mesh label is supplied, the fallback is `regular`. The returned mesh contains the vertices, triangles, assignment tables, legacy ordering, and $\Gamma_g$.
@@ -1450,25 +1411,13 @@ With tolerance $\epsilon=10^{-10}\max(\Delta x_T,\Delta y_T,1)^2$, the point is 
 
 ##### `split_window_strategy`
 
-The function maps a name such as `circle_edge_aligned` to
-
-$$
-(\mathrm{alignment},\mathrm{support})=(\mathrm{edge\_aligned},\mathrm{circle}).
-$$
+The function maps a name such as `circle_edge_aligned` to the pair `(edge_aligned, circle)`.
 
 The six supported combinations are square, triangle, and circle supports with centroid or edge-aligned frames.
 
 ##### `csa_window_strategy`
 
-For CSA, the support must be square. Therefore
-
-$$
-\mathrm{CSA}(\mathrm{triangle\_centroid})=\mathrm{square\_centroid},
-\qquad
-\mathrm{CSA}(\mathrm{circle\_edge\_aligned})=\mathrm{square\_edge\_aligned},
-$$
-
-and square supports map to themselves.
+For CSA, the support must be square. Thus `triangle_centroid` maps to `square_centroid`, `circle_edge_aligned` maps to `square_edge_aligned`, and square supports map to themselves.
 
 ##### `is_csa_supported_window`
 
@@ -1643,12 +1592,7 @@ $$
 
 ##### `scalar_alps_result_row`
 
-The in-memory row contains arrays and geometry lists. This function removes dense spectra and sorted amplitude arrays, and converts the centroid list
-
-$$
-(x_c,y_c)\rightarrow
-\{\mathrm{centroid\_x}=x_c,\mathrm{centroid\_y}=y_c\}.
-$$
+The in-memory row contains arrays and geometry lists. This function removes dense spectra and sorted amplitude arrays, and converts $(x_c,y_c)$ into the scalar fields `centroid_x` and `centroid_y`.
 
 ##### `tag_number`
 
@@ -1663,32 +1607,13 @@ This keeps file tags shell-safe while preserving the parameter value.
 
 ##### `make_alps_config_tag`
 
-For one case dictionary, the tag is
-
-$$
-\tau=
-[\mathrm{\_}\mathrm{mesh}]
-\mathrm{\_N}N_{\max}^{\mathrm{mode}}
-\mathrm{\_}\mathcal W
-\mathrm{\_}w
-\mathrm{\_eta}\eta
-\mathrm{\_os}\sigma
-\mathrm{\_csa}S_{\mathrm{CSA}}
-\mathrm{\_dx}\Delta_{\mathrm{cell}}.
-$$
+For one case dictionary, the tag is assembled from the optional mesh prefix, `N`, window strategy, quadrature-weight flag, `eta`, `os`, `csa`, and `dx` fields.
 
 All numeric pieces pass through `tag_number`.
 
 ##### `make_alps_sweep_tag`
 
-For one mesh-level sweep summary, the aggregate tag is
-
-$$
-\tau_{\mathrm{sweep}}=
-[\mathrm{\_}\mathrm{mesh}]
-\mathrm{\_N}N_{\max}^{\mathrm{mode}}
-\mathrm{\_dx}\Delta_{\mathrm{cell}}.
-$$
+For one mesh-level sweep summary, the aggregate tag keeps only the optional mesh prefix, `N`, and `dx` fields.
 
 The mesh prefix is included for `r2b4` and `r2b5`, giving the fixed outputs `_r2b4_N16_dx160` and `_r2b5_N32_dx80`.
 

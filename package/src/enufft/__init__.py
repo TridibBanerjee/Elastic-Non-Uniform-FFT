@@ -4,7 +4,7 @@
 # Original research code by Dr T Banerjee
 # Apache 2.0 license terms are provided in LICENSE
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 from .analysis import (
     ENUFFTResult,

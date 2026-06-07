@@ -7,7 +7,7 @@ authors:
 repository-code: "https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT"
 url: "https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT"
 doi: "10.5281/zenodo.20544458"
-version: "0.1.0"
+version: "1.0.0"
 date-released: "2026-06-07"
 license: "Apache-2.0"
 keywords:

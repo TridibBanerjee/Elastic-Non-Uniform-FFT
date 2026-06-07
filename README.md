@@ -3,6 +3,7 @@
 ![Elastic Non-Uniform FFT logo](enufft_logo_2.png)
 
 <p align="center">
+  <a href="https://pypi.org/project/enufft/"><img src="https://img.shields.io/pypi/v/enufft.svg" alt="PyPI"></a>
   <a href="https://doi.org/10.5281/zenodo.20544458"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20544458-blue.svg" alt="DOI"></a>
   <a href="https://doi.org/10.5281/zenodo.20545261"><img src="https://img.shields.io/badge/Dataset-10.5281%2Fzenodo.20545261-green.svg" alt="Dataset"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-red.svg" alt="License: Apache-2.0"></a>
@@ -13,6 +14,16 @@ ENUFFT is a framework that computes local Fourier coefficients directly from irr
 ## Overview
 
 Two reusable compute cores are provided. Quadrature-based Fourier coefficients from irregular terrain samples are evaluated by `Module_Nufft.py`. Any nonnegative spectrum is compressed into an adaptive retained mode count by `Module_Ems.py`. These cores are combined by the case drivers with geometry, preprocessing, comparison, and figure-construction code for the synthetic NUFFT check, the EMS theory panels, the monochromatic unstructured-cell test, the Alpine SRTM sweep, and the mountain-wave EMS extraction.
+
+## Installable Python Package
+
+The ENUFFT compute core is also available as an installable Python package:
+
+```bash
+pip install enufft
+```
+
+The package source lives in [`package/`](package/), with API notes in [`package/docs/API.md`](package/docs/API.md). It exposes the polygon NUFFT workflow, Elastic Mode Selection, sparse conjugate-mode reconstruction, and direct DFT validation routines without changing the research scripts at the repository root.
 
 ### EMS Core
 

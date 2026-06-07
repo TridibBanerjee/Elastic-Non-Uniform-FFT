@@ -1,69 +1,111 @@
 # ENUFFT
 
-Elastic Non Uniform FFT is a Python module for local Fourier analysis on
-irregularly sampled terrain or other scattered two dimensional fields.
+[![PyPI](https://img.shields.io/pypi/v/enufft.svg)](https://pypi.org/project/enufft/)
+[![Python](https://img.shields.io/pypi/pyversions/enufft.svg)](https://pypi.org/project/enufft/)
+[![License](https://img.shields.io/badge/License-Apache--2.0-red.svg)](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT/blob/main/package/LICENSE)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20544458-blue.svg)](https://doi.org/10.5281/zenodo.20544458)
 
-> Part of the **ENUFFT** framework created by **Tridib Banerjee**. The research
-> code, the full mathematical derivation, and citation metadata live at the root
-> of this repository,
-> [TridibBanerjee/Elastic-Non-Uniform-FFT](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT).
+**ENUFFT** is a Python package for local Fourier analysis on irregularly sampled
+terrain, polygonal cells, and other scattered two-dimensional fields.
 
-The module combines a Kaiser Bessel non uniform FFT with Elastic Mode Selection.
-The NUFFT step estimates local Fourier coefficients from scattered samples
-without first interpolating the field to a regular grid. The EMS step compresses
-the resulting spectrum to a data dependent number of retained conjugate mode
-pairs.
+It combines two pieces of the Elastic Non-Uniform FFT framework:
 
-The main use case is a polygonal cell or patch. A user supplies points, values,
-and a polygon. ENUFFT prescribes an analytic square Fourier window from that
-polygon, computes the local coefficient block, applies EMS, and returns both the
-raw and sparse spectra.
+- A Kaiser-Bessel non-uniform FFT path for estimating local Fourier
+  coefficients directly from scattered samples.
+- Elastic Mode Selection (EMS), which compresses the spectrum to an adaptive
+  number of physically paired retained modes.
+
+The canonical research repository, derivation, case studies, and citation
+metadata live at
+[TridibBanerjee/Elastic-Non-Uniform-FFT](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT).
 
 ## Install
+
+```bash
+pip install enufft
+```
+
+Optional extras:
+
+```bash
+pip install "enufft[plots]"
+pip install "enufft[test]"
+```
+
+Install the package directly from the repository:
 
 ```bash
 pip install "git+https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT.git#subdirectory=package"
 ```
 
-The package source lives in the `package/` directory of the ENUFFT repository.
+ENUFFT requires Python 3.10 or newer, NumPy, and SciPy.
 
-## What The Module Provides
-
-- Direct scattered point DFT for exact reference calculations.
-- Kaiser Bessel NUFFT for accelerated coefficient estimation.
-- Polygon driven square analysis windows.
-- Square, polygon, and circular support masks.
-- Uniform and local Voronoi style sample weights.
-- EMS for any supplied nonnegative spectrum.
-- EMS for signed Fourier coefficient blocks through conjugate mode pairs.
-- Sparse inverse reconstruction at arbitrary local coordinates.
-
-## Basic Use
+## Quick Start
 
 ```python
 import numpy as np
 from enufft import EMSConfig, WindowConfig, enufft_on_polygon
 
-polygon = np.array([[0.2, 0.1], [1.3, 0.0], [1.6, 0.9], [0.7, 1.4], [0.0, 0.8]])
-rng = np.random.default_rng(7)
-points = rng.uniform([-0.2, -0.2], [1.8, 1.6], size=(4000, 2))
-x_values = points.T[0]
-y_values = points.T[1]
-values = np.cos(2.0 * np.pi * (3.0 * x_values / 2.0 + 2.0 * y_values / 2.0))
+polygon = np.array([
+    [0.10, 0.16],
+    [1.35, 0.02],
+    [1.72, 0.82],
+    [1.05, 1.55],
+    [0.16, 1.18],
+])
+
+rng = np.random.default_rng(8)
+points = rng.uniform([-0.45, -0.45], [2.05, 2.05], size=(3600, 2))
+values = np.cos(2.0 * np.pi * (3.0 * points[:, 0] + 2.0 * points[:, 1]))
 
 result = enufft_on_polygon(
     points,
     values,
     polygon,
     mode_limit=6,
-    window_config=WindowConfig(support="square", alignment="centroid", expansion=1.35),
-    ems_config=EMSConfig(k_min=1, k_max=6, alpha_min=0.0, alpha_max=0.85),
+    window_config=WindowConfig(
+        support="square",
+        alignment="centroid",
+        expansion=1.42,
+    ),
+    ems_config=EMSConfig(k_min=1, k_max=6, alpha_min=0.0, alpha_max=0.78),
     weight_type="voronoi",
 )
 
 print(result.selected_modes)
 print(result.mode_pair_count, result.signed_mode_count)
+print(result.power_retained)
 ```
+
+## What You Get
+
+- Exact scattered-point DFT coefficients for reference calculations.
+- Kaiser-Bessel NUFFT coefficient blocks for faster local spectral analysis.
+- Polygon-derived square analysis windows with square, polygon, or circular
+  sample supports.
+- Uniform or local Voronoi-style quadrature weights.
+- EMS diagnostics for any nonnegative spectrum.
+- Pair-aware EMS for signed Fourier coefficient blocks.
+- Sparse inverse reconstruction at arbitrary local coordinates.
+
+## Public API
+
+The most useful entry points are:
+
+| Function or class | Purpose |
+| --- | --- |
+| `enufft_on_polygon` | Compute polygon-windowed NUFFT coefficients and apply EMS. |
+| `nufft_on_polygon` | Compute the raw polygon-windowed NUFFT coefficient block. |
+| `compute_nufft_coefficients` | Compute a Kaiser-Bessel NUFFT block from explicit samples and modes. |
+| `compute_direct_dft_coefficients` | Compute the exact scattered direct DFT block. |
+| `elastic_mode_selection` | Run EMS on a one-dimensional nonnegative spectrum. |
+| `select_sparse_conjugate_modes` | Apply EMS to signed Fourier coefficients by conjugate mode pair. |
+| `reconstruct_at_points` | Evaluate an inverse Fourier series at local coordinates. |
+| `WindowConfig`, `NUFFTConfig`, `EMSConfig` | Configure windowing, NUFFT, and EMS behavior. |
+
+See the
+[API notes](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT/blob/main/package/docs/API.md)
+for additional examples.
 
 ## EMS On A Supplied Spectrum
 
@@ -72,205 +114,85 @@ import numpy as np
 from enufft import EMSConfig, elastic_mode_selection
 
 energy = np.array([10.0, 3.0, 1.0, 0.4, 0.1])
-config = EMSConfig(k_min=1, k_max=5, alpha_min=0.0, alpha_max=0.7)
+diagnostics = elastic_mode_selection(
+    energy,
+    EMSConfig(k_min=1, k_max=5, alpha_min=0.0, alpha_max=0.7),
+)
 
-diagnostics = elastic_mode_selection(energy, config)
-pair_count = diagnostics.retain_count("pairs")
-signed_count = diagnostics.retain_count("signed")
+print(diagnostics.retain_count("pairs"))
+print(diagnostics.retain_count("signed"))
 ```
-
-## Public API
-
-- `compute_direct_dft_coefficients` evaluates the exact scattered point sum.
-- `compute_nufft_coefficients` evaluates the Kaiser Bessel accelerated block.
-- `nufft_on_polygon` prescribes a square analysis window from any polygon.
-- `enufft_on_polygon` combines polygon NUFFT with conjugate pair EMS.
-- `elastic_mode_selection` returns diagnostics for any nonnegative spectrum.
-- `select_sparse_conjugate_modes` applies EMS to signed Fourier blocks.
-- `reconstruct_at_points` evaluates the inverse series on local coordinates.
 
 ## Coefficient Convention
 
-The scattered point Fourier reference is
+ENUFFT follows the sample-mean Fourier convention used by the research code:
 
-$$
-\widehat h_{m,n}^{\mathrm{DFT}}
-=
-\frac{1}{Q}
-\sum_{q=1}^{Q}
-h_q
-\exp[-i(k_m x_q+\ell_n y_q)]
-$$
+```text
+h_hat[m, n] = mean_q h_q exp[-i(k_m x_q + l_n y_q)]
+k_m = 2 pi m / Lx
+l_n = 2 pi n / Ly
+```
 
-with
+Optional sample weights are normalized into the same sample-mean convention
+before direct DFT or NUFFT evaluation.
 
-$$
-k_m=\frac{2\pi m}{L_x}
-\qquad
-\ell_n=\frac{2\pi n}{L_y}.
-$$
+## Method
 
-Optional sample weights are normalized into the same sample mean convention.
+The NUFFT path spreads irregular samples to an oversampled auxiliary grid with a
+compact Kaiser-Bessel kernel, applies `fft2`, deconvolves the kernel transform,
+and extracts the requested signed mode block.
 
-## NUFFT Validation
+EMS sorts nonnegative mode or pair energies, computes a participation-ratio
+effective count, measures local spectral smoothness from adjacent energy gaps,
+and selects the smallest admissible retained count that satisfies the resulting
+adaptive retained-power target.
 
-The NUFFT proof compares the accelerated coefficient block with the direct DFT
-reference above. The error plotted in the histogram is
+For signed Fourier coefficient blocks, non-DC modes are grouped as conjugate
+pairs `(m, n)` and `(-m, -n)`. Retaining both signs keeps inverse
+reconstructions real-valued and keeps energy accounting consistent.
 
-$$
-e_{m,n}
-=
-\log_{10}
-\left|
-\widehat h_{m,n}^{\mathrm{NUFFT}}
--
-\widehat h_{m,n}^{\mathrm{DFT}}
-\right|.
-$$
+## Validation Figures
 
-The proof pools coefficient errors across three synthetic terrain fields. The
-lower panels show the same fields as 3D surfaces. The current validation run
-gives an optimized kernel median absolute error of `1.7301493e-06`, compared
-with `5.7647003` for the baseline kernel.
+The repository includes proof plots generated from synthetic fields and
+polygonal cells.
 
-![NUFFT proof](proof/figures/enufft_proof_nufft.png)
+The NUFFT proof compares accelerated coefficients against exact direct DFT
+coefficients across three synthetic terrain fields.
 
-## EMS Theory
+![NUFFT proof](https://raw.githubusercontent.com/TridibBanerjee/Elastic-Non-Uniform-FFT/main/package/proof/figures/enufft_proof_nufft.png)
 
-EMS starts from sorted nonnegative energies
+The EMS proof evaluates the retained-count rule across analytical spectra. The
+red dashed line marks the selected retained count.
 
-$$
-E_{(1)} \ge E_{(2)} \ge \cdots \ge E_{(J^\star)}.
-$$
+![EMS proof](https://raw.githubusercontent.com/TridibBanerjee/Elastic-Non-Uniform-FFT/main/package/proof/figures/enufft_proof_ems.png)
 
-The participation ratio is
+The polygon proof shows the supplied samples, raw Fourier block, EMS-selected
+pair, sparse reconstruction, and sorted pair-energy decay for one polygonal
+cell.
 
-$$
-N_{\mathrm{eff}}
-=
-\frac{\left(\sum_j E_{(j)}\right)^2}
-{\sum_j E_{(j)}^2}.
-$$
+![Polygon proof](https://raw.githubusercontent.com/TridibBanerjee/Elastic-Non-Uniform-FFT/main/package/proof/figures/enufft_proof_polygon.png)
 
-The local smoothness of the leading spectrum is measured from adjacent gaps
+Regenerate the proof artifacts from a source checkout with:
 
-$$
-G_j
-=
-\frac{E_{(j)}}{E_{(j+1)}}
-$$
-
-and
-
-$$
-S_\delta
-=
-\frac{1}{J_{\mathrm{window}}-1}
-\sum_j
-\exp
-\left[
--
-\frac{G_j-1}{\delta}
-\right].
-$$
-
-The control variable is
-
-$$
-\mathcal C
-=
-w_1
-\frac{\min(N_{\mathrm{eff}},K_{\max})}{K_{\max}}
-+
-w_2 S_\delta.
-$$
-
-The target retained fraction is
-
-$$
-\alpha_C
-=
-\alpha_{\min}
-+
-(\alpha_{\max}-\alpha_{\min})
-\mathcal C.
-$$
-
-EMS chooses the smallest admissible retained count satisfying
-
-$$
-K^\star
-=
-\min
-\left\{
-K
-\mid
-\frac{\sum_{j=1}^{K}E_{(j)}}{\sum_jE_{(j)}}
-\ge
-\alpha_C
-\right\}.
-$$
-
-The EMS proof evaluates this rule on six analytical spectra. The red dashed
-line marks the retained count. Broad spectra retain more pairs. Peaked spectra
-collapse to one retained pair.
-
-![EMS proof](proof/figures/enufft_proof_ems.png)
-
-## Polygon ENUFFT Validation
-
-For a polygonal cell, ENUFFT builds a local square Fourier window from the
-polygon and selected alignment rule. Samples are mapped into local coordinates,
-the NUFFT coefficient block is computed on the square, and EMS selects a sparse
-set of conjugate mode pairs.
-
-For signed Fourier coefficients, EMS groups modes by pair energy
-
-$$
-E_{m,n}^{\pm}
-=
-\left|\widehat h_{m,n}\right|^2
-+
-\left|\widehat h_{-m,-n}\right|^2.
-$$
-
-The sparse field is reconstructed by
-
-$$
-\widetilde h(x,y)
-=
-\sum_{m,n}
-\widehat h_{m,n}^{\mathrm{sparse}}
-\exp[i(k_mx+\ell_ny)].
-$$
-
-The polygon proof shows the supplied samples, the raw Fourier block, the EMS
-selected pair, the sparse reconstruction, and the sorted pair energy decay. The
-current validation run retains one mode pair, two signed modes, and
-`0.94114098` of the sorted pair energy.
-
-![Polygon proof](proof/figures/enufft_proof_polygon.png)
-
-## Credits
-
-ENUFFT, both the NUFFT formulation and the Elastic Mode Selection algorithm, was
-created by Tridib Banerjee. This package repackages that research framework as an
-installable Python module. The canonical source, the full mathematical
-derivation, and the reference case studies live in the upstream repository.
-
-- Repository: https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT
-- DOI: https://doi.org/10.5281/zenodo.20544458
-
-## License
-
-Released under the Apache License 2.0. The full terms are in
-[LICENSE](LICENSE), and the framework attribution notices are in [NOTICE](NOTICE).
+```bash
+python package/scripts/make_proof_plots.py
+```
 
 ## Citation
 
-If you use ENUFFT in scholarly, published, or publicly distributed work, please
-cite it using the metadata in [CITATION.cff](CITATION.cff), or:
+If you use ENUFFT in scholarly, published, or publicly distributed work, cite
+the framework metadata in
+[CITATION.cff](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT/blob/main/package/CITATION.cff):
 
-> Banerjee, Tridib. *Elastic Non-Uniform FFT (ENUFFT).*
-> https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT —
-> DOI: 10.5281/zenodo.20544458
+```text
+Banerjee, Tridib. Elastic Non-Uniform FFT (ENUFFT).
+https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT
+DOI: 10.5281/zenodo.20544458
+```
+
+## License
+
+Released under the Apache License 2.0. See
+[LICENSE](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT/blob/main/package/LICENSE)
+and
+[NOTICE](https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT/blob/main/package/NOTICE).

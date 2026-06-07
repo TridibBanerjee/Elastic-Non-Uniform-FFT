@@ -1,0 +1,15 @@
+Elastic Non-Uniform FFT (ENUFFT)
+
+Copyright 2026 Tridib Banerjee
+
+ENUFFT is a numerical framework developed by Tridib Banerjee.
+Redistributions and derivative works must retain the applicable copyright,
+license, and attribution notices for this framework.
+
+If this framework is used to produce scholarly, published, or publicly
+distributed results, please cite the ENUFFT paper and/or the repository
+citation metadata in CITATION.cff.
+
+The PinCFlow-EMS submodule is a separate project with its own license. See
+https://github.com/TridibBanerjee/PinCFlow-EMS/blob/EMS/LICENSE.md for the
+license terms that apply to that submodule.

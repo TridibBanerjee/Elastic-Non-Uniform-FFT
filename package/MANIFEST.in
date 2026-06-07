@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include NOTICE
+include CITATION.cff
+include pyproject.toml
+include docs/API.md
+recursive-include examples *.py
+recursive-include proof/figures *.png *.pdf *.txt
+recursive-include scripts *.py
+recursive-include tests *.py

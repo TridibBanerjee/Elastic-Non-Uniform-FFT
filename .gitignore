@@ -47,3 +47,7 @@
 
 # Named run script.
 !/Run_Alps_Levante.sh
+
+# Installable Python package (its own .gitignore further excludes build artifacts).
+!/package/
+!/package/**

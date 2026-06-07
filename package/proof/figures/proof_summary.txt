@@ -1,0 +1,7 @@
+ems_peak_k_star: 1
+ems_uniform_k_star: 12
+nufft_baseline_median_abs_error: 5.7647003
+nufft_optimized_median_abs_error: 1.7301493e-06
+polygon_k_star: 1
+polygon_power_retained: 0.94114098
+polygon_signed_modes: 2

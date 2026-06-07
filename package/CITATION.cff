@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this framework in scholarly, published, or publicly distributed work, please cite it using these metadata."
+title: "Elastic Non-Uniform FFT (ENUFFT)"
+authors:
+  - family-names: "Banerjee"
+    given-names: "Tridib"
+repository-code: "https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT"
+url: "https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT"
+doi: "10.5281/zenodo.20544458"
+version: "0.1.0"
+date-released: "2026-06-07"
+license: "Apache-2.0"
+keywords:
+  - nufft
+  - fourier
+  - terrain
+  - spectral-analysis
+  - elastic-mode-selection
+abstract: "Elastic Non-Uniform FFT (ENUFFT) is a numerical framework for local Fourier analysis of irregular DEM samples and elastic mode selection."

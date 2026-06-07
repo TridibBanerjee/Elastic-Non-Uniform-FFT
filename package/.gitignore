@@ -1,0 +1,11 @@
+# Local build and test artifacts for the enufft package.
+.claude/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.DS_Store

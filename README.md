@@ -247,13 +247,13 @@ The mathematical target remains the direct quadrature coefficient. Only the eval
 
 ## Repository Setup
 
-Clone the repository with its PinCFlow companion fork:
+Clone the repository with its PinCFlow.jl companion fork:
 
 ```bash
 git clone --recurse-submodules https://github.com/TridibBanerjee/Elastic-Non-Uniform-FFT.git
 ```
 
-If the repository was cloned without submodules, initialize the public PinCFlow fork afterward:
+If the repository was cloned without submodules, initialize the public PinCFlow.jl fork afterward:
 
 ```bash
 git submodule update --init --recursive
